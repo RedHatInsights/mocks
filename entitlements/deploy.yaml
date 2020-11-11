@@ -62,7 +62,7 @@ objects:
           imagePullPolicy: Always
           name: entitlements
           ports:
-          - containerPort: 8080
+          - containerPort: 3000
             protocol: TCP
           resources:
             limits:
@@ -88,10 +88,10 @@ objects:
     name: entitlements-api-go
   spec:
     ports:
-    - name: 8080-tcp
-      port: 8080
+    - name: 3000-tcp
+      port: 3000
       protocol: TCP
-      targetPort: 8080
+      targetPort: 3000
     selector:
       app: entitlements
     sessionAffinity: None
