@@ -136,7 +136,7 @@ class KeyCloakHelper:
                 'enabled': True,
                 'bearerOnly': False,
                 'publicClient': True,
-                'rootUrl': f'{self.client_base_url}'
+                'rootUrl': f'{self.client_base_url}',
                 'baseUrl': f'{self.client_base_url}',
                 'redirectUris': [f'{self.client_base_url}/*'],
                 'protocolMappers': protocol_mappers
