@@ -11,10 +11,11 @@ import keycloak
 
 class KeyCloakHelper:
 
-    def __init__(self, server, username, password):
+    def __init__(self, server, username, password, client_base_url):
         self.server = server
         self.username = username
         self.password = password
+        self.client_base_url = client_base_url
 
         self.wait_for_server()
 
@@ -135,9 +136,9 @@ class KeyCloakHelper:
                 'enabled': True,
                 'bearerOnly': False,
                 'publicClient': True,
-                'rootUrl': 'https://prod.foo.redhat.com:8443',
-                'baseUrl': 'https://prod.foo.redhat.com:8443',
-                'redirectUris': ['https://prod.foo.redhat.com:8443/*'],
+                'rootUrl': f'{self.client_base_url}'
+                'baseUrl': f'{self.client_base_url}',
+                'redirectUris': [f'{self.client_base_url}/*'],
                 'protocolMappers': protocol_mappers
             })
 
@@ -171,8 +172,9 @@ class KeyCloakHelper:
 
 
 def init_realm():
-    server = 'https://sso.local.redhat.com:8443'
-    un = 'admin'
-    pw = 'password'
-    kc = KeyCloakHelper(server, un, pw)
+    server = os.getenv("KEYCLOAK_URL", "http://keycloak:8080")
+    client_base_url = os.getenv('CLIENT_BASE_URL', "https://front-end-aggregator")
+    un = os.getenv("KEYCLOAK_USER", "admin")
+    pw = os.getenv("KEYCLOAK_PASSWORD", "admin")
+    kc = KeyCloakHelper(server, un, pw, redirect_uri)
     kc.create_bob()
