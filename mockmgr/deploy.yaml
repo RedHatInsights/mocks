@@ -59,7 +59,7 @@ objects:
           - -c
           - ./run.sh mockmgr
           image: ${IMAGE}:${IMAGE_TAG}
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           name: mockmgr
           ports:
           - containerPort: 8080

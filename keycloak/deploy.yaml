@@ -55,7 +55,7 @@ objects:
               weight: 99
         containers:
         - image: ${IMAGE}:${IMAGE_TAG}
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           name: keycloak
           env:
           - name: DB_VENDOR

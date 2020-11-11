@@ -59,7 +59,7 @@ objects:
           - -c
           - ./run.sh rbac
           image: ${IMAGE}:${IMAGE_TAG}
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           name: rbac
           ports:
           - containerPort: 8080

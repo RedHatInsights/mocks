@@ -59,7 +59,7 @@ objects:
           - -c
           - ./run.sh bop
           image: ${IMAGE}:${IMAGE_TAG}
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           name: bop
           ports:
           - containerPort: 8080

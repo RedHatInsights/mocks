@@ -59,7 +59,7 @@ objects:
           - -c
           - ./run.sh entitlements
           image: ${IMAGE}:${IMAGE_TAG}
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           name: entitlements
           ports:
           - containerPort: 8080
