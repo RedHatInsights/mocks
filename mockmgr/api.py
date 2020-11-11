@@ -106,11 +106,13 @@ class NewUserForm(FlaskForm):
     submit = SubmitField('submit')
 
 
-username = os.environ.get('KEYCLOAK_USERNAME', 'admin')
-password = os.environ.get('KEYCLOAK_PASSWORD', 'admin')
-server = os.environ.get('KEYCLOAK_URL', "http://keycloak:8080")
+server = os.getenv("KEYCLOAK_URL", "http://keycloak:8080")
+client_base_url = os.getenv('CLIENT_BASE_URL', "https://front-end-aggregator")
+username = os.getenv("KEYCLOAK_USER", "admin")
+password = os.getenv("KEYCLOAK_PASSWORD", "admin")
+
 REALM = "redhat-external"
-KH = KeyCloakHelper(server, username, password)
+KH = KeyCloakHelper(server, username, password, client_base_url)
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'Skey12345'

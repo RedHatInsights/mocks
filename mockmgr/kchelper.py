@@ -176,5 +176,5 @@ def init_realm():
     client_base_url = os.getenv('CLIENT_BASE_URL', "https://front-end-aggregator")
     un = os.getenv("KEYCLOAK_USER", "admin")
     pw = os.getenv("KEYCLOAK_PASSWORD", "admin")
-    kc = KeyCloakHelper(server, un, pw, redirect_uri)
+    kc = KeyCloakHelper(server, un, pw, client_base_url)
     kc.create_bob()
