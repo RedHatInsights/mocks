@@ -57,8 +57,8 @@ objects:
         - command:
           - /bin/bash
           - -c
-          - run.sh bop
-          image: quay.io/cloudservices/${IMAGE}:${IMAGE_TAG}
+          - ./run.sh bop
+          image: ${IMAGE}:${IMAGE_TAG}
           imagePullPolicy: IfNotPresent
           name: bop
           ports:

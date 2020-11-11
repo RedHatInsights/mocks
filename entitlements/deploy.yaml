@@ -12,7 +12,7 @@ objects:
   metadata:
     labels:
       app: entitlements
-    name: en
+    name: entitlements-api-go
   spec:
     minReadySeconds: 15
     progressDeadlineSeconds: 600
@@ -57,8 +57,8 @@ objects:
         - command:
           - /bin/bash
           - -c
-          - run.sh entitlements
-          image: quay.io/cloudservices/${IMAGE}:${IMAGE_TAG}
+          - ./run.sh entitlements
+          image: ${IMAGE}:${IMAGE_TAG}
           imagePullPolicy: IfNotPresent
           name: entitlements
           ports:
