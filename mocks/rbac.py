@@ -1,18 +1,10 @@
-#/usr/bin/env python3
-
-import os
-
-import flask
-from flask import Flask
 from flask import jsonify
-from flask import request
-from flask import redirect
+from flask import Blueprint
 
 
-app = Flask(__name__)
+blueprint = Blueprint("rbac", __name__)
 
-
-rbac = {
+rbac_response = {
     'meta': {'count': 30, 'limit': 1000, 'offset': 0},
     'links': {
         'first': '/api/rbac/v1/access/?application=&format=json&limit=1000&offset=0',
@@ -26,10 +18,7 @@ rbac = {
 }
 
 
-@app.route('/api/rbac/v1/access/')
+@blueprint.route('/v1/access/')
 def rbac_access():
-    return jsonify(rbac)
+    return jsonify(rbac_response)
 
-
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8080, debug=True)

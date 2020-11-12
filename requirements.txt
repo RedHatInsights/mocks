@@ -2,3 +2,4 @@ flask
 python-keycloak
 flask_wtf
 requests
+-e .

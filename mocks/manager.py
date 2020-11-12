@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 import os
 import json
 import time
@@ -11,6 +9,7 @@ import keycloak
 
 import flask
 from flask import Flask
+from flask import Blueprint
 from flask import jsonify
 from flask import request
 from flask import redirect
@@ -20,8 +19,11 @@ from flask_wtf import FlaskForm
 from wtforms import IntegerField, StringField, PasswordField, BooleanField, SubmitField
 from wtforms.validators import DataRequired
 
-from kchelper import KeyCloakHelper
+from crcmocks.keycloak_helper import KeyCloakHelper
+import crcmocks.config as conf
 
+
+blueprint = Blueprint("manager", __name__)
 
 USER_PAGE_TEMPLATE = ''' <!DOCTYPE HTML>
 <html>
@@ -61,7 +63,7 @@ USER_PAGE_TEMPLATE = ''' <!DOCTYPE HTML>
         {% endfor %}
         </table>
         <br>
-        <a href='/adduser'>add user</a>
+        <a href='/_manager/user'>add user</a>
     </body>
 </html>
 '''
@@ -106,58 +108,34 @@ class NewUserForm(FlaskForm):
     submit = SubmitField('submit')
 
 
-server = os.getenv("KEYCLOAK_URL", "http://keycloak:8080")
-client_base_url = os.getenv('CLIENT_BASE_URL', "https://front-end-aggregator")
-username = os.getenv("KEYCLOAK_USER", "admin")
-password = os.getenv("KEYCLOAK_PASSWORD", "admin")
-
-REALM = "redhat-external"
-KH = KeyCloakHelper(server, username, password, client_base_url)
-
-app = Flask(__name__)
-app.config['SECRET_KEY'] = 'Skey12345'
+kc_helper = KeyCloakHelper(conf.KEYCLOAK_URL, conf.KEYCLOAK_USER, conf.KEYCLOAK_PASSWORD, conf.KEYCLOAK_REALM, conf.KEYCLOAK_CLIENT_BASE_URL)
 
 
-@app.before_first_request
-def create_initial_user():
-    try:
-        KH.create_realm_user(REALM, 'bob', 'redhat1234', 'bob', 'barker', 'bob@redhat.com', 1111, 1)
-    except Exception as e:
-        print(e)
-
-
-@app.route('/')
+@blueprint.route('/')
 def root():
-    return render_template_string(USER_PAGE_TEMPLATE, rusers=KH.get_all_users())
+    return render_template_string(USER_PAGE_TEMPLATE, rusers=kc_helper.get_all_users())
 
 
-@app.route('/realms/<realmname>')
-def realms(realmname):
-    rusers = KH.get_realm_users(realmname)
+@blueprint.route('/realm')
+def realm():
+    rusers = kc_helper.get_realm_users()
     return render_template_string(USER_PAGE_TEMPLATE, rusers=rusers)
 
 
-@app.route('/adduser', methods=['GET', 'POST'])
+@blueprint.route('/user', methods=['POST'])
 def adduser():
     form = NewUserForm()
 
     if request.method == 'POST':
-        print(request.form)
         un = request.form.get('username')
         email = request.form.get('email')
         fn = request.form.get('first_name')
         ln = request.form.get('last_name')
         oi = request.form.get('org_id')
         an = request.form.get('account_number')
-        pw = request.form.get('username')
-        #create_realm_user(self, realm, uname, password, fname, lname, email, account_id, org_id):
-        print('redhat-external', un, pw, fn, ln, email, an, oi)
-        KH.create_realm_user(REALM, un, pw, fn, ln, email, an, oi)
-        print('created ...')
-        return redirect('/')
+        pw = request.form.get('password')
+        kc_helper.create_realm_user(un, pw, fn, ln, email, an, oi)
+        return redirect('')
 
     return render_template_string(NEW_USER_FORM, form=form)
 
-
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=8080, debug=True)

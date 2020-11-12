@@ -1,16 +1,19 @@
 #!/usr/env/bin python
-import json
 import logging
 from multiprocessing import Process
 from time import strftime
 
 from flask import Flask
 from flask import request
+from flask.json import jsonify
+
+import requests
 
 app = Flask(__name__)
 log = logging.getLogger(__name__)
 
 request_data_list = []
+
 
 user_data_list = [
     ["jdoe", 123456701, "0369234", "jdoe@acme.com", "John", "Doe", '"John Doe" jdoe@acme.com'],
@@ -66,18 +69,23 @@ def build_user_data(user_data_list):
     return user_data
 
 
-@app.route("/users", methods=["POST"])
-def mock_user():
+@app.route("/v1/users", methods=["POST"])
+def mock_users():
     data = []
     for user in build_user_data(user_data_list):
         for key, value in user.items():
             data.append(value)
-    return json.dumps(data)
+    return jsonify(data)
 
 
-@app.route("/sendEmails", methods=["POST"])
+@app.route("/v1/sendEmails", methods=["POST"])
 def mock_send_email():
     return "sendEmails post requested"
+
+
+@app.route("/v1/jwt", methods=["GET"])
+def mock_jwt():
+
 
 
 @app.after_request
@@ -96,19 +104,19 @@ def store_request(response):
     return response
 
 
-@app.route("/getRequests")
+@app.route("/_getRequests")
 def get_request_data():
-    return json.dumps(request_data_list)
+    return jsonify(request_data_list)
 
 
-@app.route("/clearRequests")
+@app.route("/_clearRequests")
 def clear_request_data():
     global request_data_list
     request_data_list = []
-    return json.dumps([])
+    return jsonify([])
 
 
-@app.route("/shutdown", methods=["POST"])
+@app.route("/_shutdown", methods=["POST"])
 def shutdown_server():
     log.info("Shutdown context hit with POST!")
     shutdown = request.environ.get("werkzeug.server.shutdown")
