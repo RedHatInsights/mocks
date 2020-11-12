@@ -2,6 +2,8 @@
 
 Mock services for testing cloud.redhat.com applications
 
+Many thanks to @jctanner who laid a lot of the groundwork for this in https://github.com/jctanner/aa-hacking/
+
 This is project offers a solution for mocking out certain service dependencies such as BOP, RBAC, entitlements, and SSO.
 
 It relies on two pieces:
