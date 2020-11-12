@@ -6,37 +6,34 @@ from flask.json import jsonify
 
 import crcmocks.config as conf
 from crcmocks.keycloak_helper import keycloak_helper
+import crcmocks.db
 
 blueprint = Blueprint("bop", __name__)
 
 log = logging.getLogger(__name__)
 
 
-def build_user_data(user_data_list):
-    user_data = []
-    ach_data = {}
-    for data in user_data_list:
-        ach_data[data["username"]] = {
-            "username": data["username"],
-            "id": data["id"],
-            "account_number": data["account_number"],
-            "email": data["email"],
-            "first_name": data["first_name"],
-            "last_name": data["last_name"],
-            "address_string": data["address_string"],
-            "is_active": data["is_active"],
-        }
-    user_data.append(ach_data)
-    return user_data
+def filter_fields(user_data_list):
+    # return only the fields valid for a BOP response
+    data = []
+    keys = [
+        "username",
+        "id",
+        "account_number",
+        "email",
+        "first_name",
+        "last_name",
+        "address_string",
+        "is_active",
+    ]
+    for user in user_data_list:
+        data.append({k: user[k] for k in keys})
+    return data
 
 
 @blueprint.route("/v1/users", methods=["POST"])
 def mock_users():
-    data = []
-    for user in build_user_data(conf.USERS):
-        for key, value in user.items():
-            data.append(value)
-    return jsonify(data)
+    return jsonify(filter_fields(crcmocks.db.all_users()))
 
 
 @blueprint.route("/v1/sendEmails", methods=["POST"])

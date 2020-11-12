@@ -16,6 +16,8 @@ See the `Deploying` section below for information on how to deploy locally or on
 
 When `crcmocks` starts up, it uses options defined in its [config](crcmocks/config.py) to connect to a keycloak deployment and provision a realm, client, and users in the SSO backend.
 
+*NOTE*: every time `crcmocks` is restarted, it will re-intialize the users on the keycloak server. User data does *not* persist!
+
 Once you have the `crcmocks` API service running (it listens on port 9000 by default) the following APIs are provided:
 
 ### Management APIS

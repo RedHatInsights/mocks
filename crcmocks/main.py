@@ -10,8 +10,9 @@ from crcmocks.bop import blueprint as bop_bp
 from crcmocks.rbac import blueprint as rbac_bp
 from crcmocks.entitlements import blueprint as entitlements_bp
 from crcmocks.manager import blueprint as manager_bp
-from crcmocks.manager import kc_helper
+from crcmocks.manager import setup_keycloak
 import crcmocks.config as conf
+import crcmocks.db
 
 
 log = logging.getLogger(__name__)
@@ -25,25 +26,8 @@ app.register_blueprint(rbac_bp, url_prefix="/api/rbac")
 app.register_blueprint(manager_bp, url_prefix="/_manager")
 
 
-request_data_list = []
-
-
-def setup_keycloak():
-    kc_helper.create_realm()
-    kc_helper.create_realm_client(conf.KEYCLOAK_CLIENT_ID)
-    for user in conf.USERS:
-        kc_helper.create_realm_user(
-            user["username"],
-            user["password"],
-            user["first_name"],
-            user["last_name"],
-            user["email"],
-            user["account_number"],
-            user["org_id"],
-        )
-
-
 def start_flask():
+    logging.basicConfig(level=getattr(logging, conf.LOG_LEVEL))
     if conf.KEYCLOAK:
         setup_keycloak()
     app.run(host="0.0.0.0", port=conf.PORT, debug=True)
@@ -61,19 +45,18 @@ def store_request(response):
         "response_status": response.status,
         "response_data": response.data.decode("utf-8"),
     }
-    request_data_list.append(request_info)
+    crcmocks.db.add_request(request_info)
     return response
 
 
 @app.route("/_getRequests")
 def get_request_data():
-    return jsonify(request_data_list)
+    return jsonify(crcmocks.db.all_requests())
 
 
 @app.route("/_clearRequests", methods=["POST"])
 def clear_request_data():
-    global request_data_list
-    request_data_list = []
+    crcmocks.db.clear_requests()
     return jsonify([])
 
 

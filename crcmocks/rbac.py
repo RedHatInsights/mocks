@@ -16,6 +16,7 @@ rbac_response = {
 }
 
 
+# TODO: allow customizable rbac response per user
 @blueprint.route("/v1/access/")
 def rbac_access():
     return jsonify(rbac_response)

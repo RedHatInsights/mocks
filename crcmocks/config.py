@@ -8,12 +8,15 @@ KEYCLOAK_PASSWORD = os.getenv("KEYCLOAK_PASSWORD", "admin")
 KEYCLOAK_REALM = os.getenv("KEYCLOAK_REALM", "redhat-external")
 KEYCLOAK = str(os.getenv("KEYCLOAK", True)).lower() == "true"
 KEYCLOAK_CLIENT_ID = os.getenv("KEYCLOAK_CLIENT_ID", "cloud-services")
+LOG_LEVEL = "INFO"
+if os.getenv("LOG_LEVEL") in ["critical", "error", "warning", "info", "debug", "notset"]:
+    LOG_LEVEL = os.getenv("LOG_LEVEL").upper()
 
 PORT = int(os.getenv("PORT", 9000))
 
 SECRET_KEY = os.getenv("FLASK_SECRET_KEY", os.urandom(32))
 
-USERS = [
+DEFAULT_USERS = [
     {
         "username": "jdoe",
         "id": 123456701,

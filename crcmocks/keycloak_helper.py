@@ -1,10 +1,13 @@
 #!/usr/bin/env python3
+import logging
 import time
 
 import keycloak
-from cached_property import cached_property
 
 import crcmocks.config as conf
+
+
+log = logging.getLogger(__name__)
 
 
 class KeyCloakHelper:
@@ -19,17 +22,17 @@ class KeyCloakHelper:
         count = 1
         stop_time = time.time() + 30
         while time.time() < stop_time:
-            print("%s attempting keycloak connection to %s ..." % (count, self.server))
+            log.info("attempt [%d] to connect to keycloak server '%s' ...", count, self.server)
             try:
                 self._get_admin_object()
                 break
-            except Exception as e:
-                print(e)
+            except Exception:
+                log.exception("error connecting to keycloak server")
             count += 1
             time.sleep(1)
         else:
             raise Exception(f"failed to connect to keycloak server {self.server}")
-        print("connected to keycloak server %s" % self.server)
+        log.info("connected to keycloak server '%s' ...", self.server)
 
     def get_mapper(self, attribute, mtype="String"):
         mapper = {
@@ -54,14 +57,12 @@ class KeyCloakHelper:
             self.server + "/auth/", username=self.username, password=self.password, verify=False
         )
 
-    @cached_property
+    @property
     def admin(self):
-        self.wait_for_server()
         return self._get_admin_object()
 
-    @cached_property
+    @property
     def realm_admin(self):
-        self.wait_for_server()
         radmin = keycloak.KeycloakAdmin(
             self.server + "/auth/",
             realm_name=self.realm,
@@ -72,9 +73,8 @@ class KeyCloakHelper:
         )
         return radmin
 
-    @cached_property
+    @property
     def openid(self):
-        self.wait_for_server()
         return keycloak.KeycloakOpenID(
             self.server + "/auth/",
             realm_name=self.realm,
@@ -106,6 +106,10 @@ class KeyCloakHelper:
     def get_realm_users(self):
         return self.realm_admin.get_users()
 
+    def delete_all_realm_users(self):
+        for user in self.get_realm_users():
+            self.realm_admin.delete_user(user["id"])
+
     def create_realm_client(self, client):
         realm_client_names = self.get_realm_client_names()
         if client in realm_client_names:
@@ -134,24 +138,31 @@ class KeyCloakHelper:
             }
         )
 
-    def create_realm_user(self, uname, password, fname, lname, email, account_id, org_id):
-        self.realm_admin.create_user(
-            {
-                "enabled": True,
-                "username": uname,
-                "firstName": fname,
-                "lastName": lname,
-                "email": email,
-                "attributes": {
-                    "first_name": fname,
-                    "last_name": lname,
-                    "account_id": account_id,
-                    "account_number": account_id,
-                    "org_id": org_id,
-                },
-                "credentials": [{"temporary": False, "type": "password", "value": password}],
-            }
-        )
+    def upsert_realm_user(self, uname, password, fname, lname, email, account_id, org_id):
+        user_json = {
+            "enabled": True,
+            "username": uname,
+            "firstName": fname,
+            "lastName": lname,
+            "email": email,
+            "attributes": {
+                "first_name": fname,
+                "last_name": lname,
+                "account_id": account_id,
+                "account_number": account_id,
+                "org_id": org_id,
+            },
+            "credentials": [{"temporary": False, "type": "password", "value": password}],
+        }
+        for user in self.get_realm_users():
+            if user["username"] == uname:
+                # user already exists
+                user_id = user["id"]
+                self.realm_admin.update_user(user_id, user_json)
+                break
+        else:
+            # user does not already exist
+            self.realm_admin.create_user(user_json)
 
 
 keycloak_helper = KeyCloakHelper(

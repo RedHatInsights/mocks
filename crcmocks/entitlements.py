@@ -22,6 +22,7 @@ for svc in services:
     entitlements[svc] = {"is_entitled": True, "is_trial": False}
 
 
+# TODO: allow customizable entitlements response per user
 @blueprint.route("/v1/services")
 def services():
     return jsonify(entitlements)

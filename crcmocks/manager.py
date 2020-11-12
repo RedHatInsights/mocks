@@ -1,3 +1,5 @@
+import logging
+
 from flask import Blueprint
 from flask import jsonify
 from flask import request
@@ -11,8 +13,10 @@ from wtforms.validators import DataRequired
 
 from crcmocks.keycloak_helper import KeyCloakHelper
 import crcmocks.config as conf
+import crcmocks.db
 
 
+log = logging.getLogger(__name__)
 blueprint = Blueprint("manager", __name__)
 
 USER_PAGE_TEMPLATE = """ <!DOCTYPE HTML>
@@ -116,6 +120,29 @@ def ui_root():
     )
 
 
+def add_user(user_data):
+    un = user_data.get("username")
+    email = user_data.get("email")
+    fn = user_data.get("first_name")
+    ln = user_data.get("last_name")
+    oi = user_data.get("org_id")
+    an = user_data.get("account_number")
+    pw = user_data.get("password")
+    kc_helper.upsert_realm_user(un, pw, fn, ln, email, an, oi)
+    crcmocks.db.add_user(user_data)
+    log.info("added/updated user: %s", un)
+
+
+def setup_keycloak():
+    log.info("setting up keycloak...")
+    kc_helper.wait_for_server()
+    kc_helper.create_realm()
+    kc_helper.create_realm_client(conf.KEYCLOAK_CLIENT_ID)
+    kc_helper.delete_all_realm_users()
+    for user in conf.DEFAULT_USERS:
+        add_user(user)
+
+
 @blueprint.route("/ui/addUser", methods=["GET", "POST"])
 def ui_adduser():
     if not conf.KEYCLOAK:
@@ -124,14 +151,8 @@ def ui_adduser():
     form = NewUserForm()
 
     if request.method == "POST":
-        un = request.form.get("username")
-        email = request.form.get("email")
-        fn = request.form.get("first_name")
-        ln = request.form.get("last_name")
-        oi = request.form.get("org_id")
-        an = request.form.get("account_number")
-        pw = request.form.get("password")
-        kc_helper.create_realm_user(un, pw, fn, ln, email, an, oi)
+        user_data = request.form.to_dict()
+        add_user(user_data)
         return redirect(url_for("manager.ui_root"))
 
     return render_template_string(NEW_USER_FORM, form=form)
@@ -150,13 +171,6 @@ def user():
     if not conf.KEYCLOAK:
         return "keycloak integration is disabled", 501
 
-    data = request.json(force=True)
-    un = data.get("username")
-    email = data.get("email")
-    fn = data.get("first_name")
-    ln = data.get("last_name")
-    oi = data.get("org_id")
-    an = data.get("account_number")
-    pw = data.get("password")
-    kc_helper.create_realm_user(un, pw, fn, ln, email, an, oi)
+    user_data = request.json(force=True)
+    add_user(user_data)
     return jsonify(kc_helper.get_realm_users())
