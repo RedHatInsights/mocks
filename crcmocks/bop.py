@@ -47,7 +47,7 @@ def mock_send_email():
 @blueprint.route("/v1/jwt", methods=["GET"])
 def mock_jwt():
     if conf.KEYCLOAK:
-        pubkey = keycloak_helper.openid.certs()["keys"][0]["x5c"][0]
+        pubkey = keycloak_helper.openid.public_key()
     else:
         pubkey = "TODO insert it ca cert here"
     return jsonify({"pubkey": f"-----BEGIN PUBLIC KEY-----\n{pubkey}\n-----END PUBLIC KEY-----"})
