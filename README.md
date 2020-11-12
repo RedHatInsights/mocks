@@ -98,3 +98,4 @@ You can access the mock user management APIs as described above via the mock `Ro
 # TODO
 
 * Allow users to be created with dynamic RBAC permissions and/or entitlements
+* Integrate with the [Clowder](http://www.github.com/RedHatInsights/clower) operator
