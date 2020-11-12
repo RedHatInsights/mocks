@@ -2,6 +2,6 @@
   "ephemeral": {
     "cache_ttl" : 300,
     "request_timeout" : 10000,
-    "host": "http://entitlements-api-go:3000/api/entitlements/v1/services"
+    "host": "http://entitlements-api-go.bsquizza.svc.cluster.local:3000/api/entitlements/v1/services"
   }
 }
