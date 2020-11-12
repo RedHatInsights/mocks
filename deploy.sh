@@ -8,7 +8,7 @@ set -exv
 FE_HOST=$(oc get route front-end-aggregator -o jsonpath='{.spec.host}')
 
 if [ ! -z "$FE_HOST" ]; then
-    oc process -f deploy.yaml -p KEYCLOAK_CLIENT_BASE_URL=$FE_HOST | oc apply -f -
+    oc process -f deploy.yaml -p KEYCLOAK_CLIENT_BASE_URL="https://${FE_HOST}" | oc apply -f -
 else
     oc process -f deploy.yaml | oc apply -f -
 fi
