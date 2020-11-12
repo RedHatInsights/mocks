@@ -1,7 +1,8 @@
 {
   "ephemeral" : {
     "auth_proxy" : "false",
-    "services_host" : "http://mocks:8080/api/bop",
+    "services_host" : "http://mocks:8080",
+    "jwt_path": "/api/bop/v1/jwt",
     "services_host_proxy" : "http://127.0.0.1:9083",
     "apitoken" : "",
     "x-rh-insights-env" : "qa",
