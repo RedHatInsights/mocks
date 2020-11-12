@@ -45,10 +45,11 @@ if [ ! -z "$FE_HOST" ]; then
     # modify chrome.js to point to our keycloak deployment
     echo "Updating chrome.js SSO url..."
     QA_HOST="sso.qa.redhat.com"
-    KEYCLOAK_HOST=$(oc get route front-end-aggregator -o jsonpath='{.spec.host}' -n $NS)
+    KEYCLOAK_HOST=$(oc get route keycloak -o jsonpath='{.spec.host}' -n $NS)
     CHROME_JS="/all/code/chrome/js/chrome.*.js"
     POD=$(oc get pod -l app=front-end-aggregator -o jsonpath='{.items[0].metadata.name}')
     oc exec $POD -- /bin/bash -c "sed -i 's/$QA_HOST/$KEYCLOAK_HOST/g' $CHROME_JS"
+    oc exec $POD -- /bin/bash -c "rm $CHROME_JS.gz && gzip --keep $CHROME_JS"
 fi
 
 echo "Use the following routes: "
