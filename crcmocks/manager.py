@@ -1,7 +1,9 @@
 from flask import Blueprint
+from flask import jsonify
 from flask import request
 from flask import redirect
 from flask import render_template_string
+from flask import url_for
 
 from flask_wtf import FlaskForm
 from wtforms import IntegerField, StringField, SubmitField
@@ -28,7 +30,6 @@ USER_PAGE_TEMPLATE = """ <!DOCTYPE HTML>
         <!--<pre>{{ rusers|tojson }}</pre>-->
         <table>
         <tr>
-            <th>realm</th>
             <th>id</th>
             <th>username</th>
             <th>first_name</th>
@@ -39,7 +40,6 @@ USER_PAGE_TEMPLATE = """ <!DOCTYPE HTML>
         </tr>
         {% for ruser in rusers %}
             <tr>
-                <td>{{ ruser.realm }}</td>
                 <td>{{ ruser.id }}</td>
                 <td>{{ ruser.username }}</td>
                 <td>{{ ruser.attributes.first_name[0] }}</td>
@@ -51,7 +51,7 @@ USER_PAGE_TEMPLATE = """ <!DOCTYPE HTML>
         {% endfor %}
         </table>
         <br>
-        <a href='/_manager/user'>add user</a>
+        <a href='{{ redirect_url }}'>add user</a>
     </body>
 </html>
 """
@@ -105,19 +105,22 @@ kc_helper = KeyCloakHelper(
 )
 
 
-@blueprint.route("/")
-def root():
-    return render_template_string(USER_PAGE_TEMPLATE, rusers=kc_helper.get_all_users())
+@blueprint.route("/ui")
+def ui_root():
+    if not conf.KEYCLOAK:
+        return "keycloak integration is disabled", 501
+    return render_template_string(
+        USER_PAGE_TEMPLATE,
+        redirect_url=url_for("manager.ui_adduser"),
+        rusers=kc_helper.get_realm_users(),
+    )
 
 
-@blueprint.route("/realm")
-def realm():
-    rusers = kc_helper.get_realm_users()
-    return render_template_string(USER_PAGE_TEMPLATE, rusers=rusers)
+@blueprint.route("/ui/addUser", methods=["GET", "POST"])
+def ui_adduser():
+    if not conf.KEYCLOAK:
+        return "keycloak integration is disabled", 501
 
-
-@blueprint.route("/user", methods=["POST"])
-def adduser():
     form = NewUserForm()
 
     if request.method == "POST":
@@ -129,6 +132,31 @@ def adduser():
         an = request.form.get("account_number")
         pw = request.form.get("password")
         kc_helper.create_realm_user(un, pw, fn, ln, email, an, oi)
-        return redirect("")
+        return redirect(url_for("manager.ui_root"))
 
     return render_template_string(NEW_USER_FORM, form=form)
+
+
+@blueprint.route("/users")
+def users():
+    if not conf.KEYCLOAK:
+        return "keycloak integration is disabled", 501
+
+    return jsonify(kc_helper.get_realm_users())
+
+
+@blueprint.route("/addUser", methods=["POST"])
+def user():
+    if not conf.KEYCLOAK:
+        return "keycloak integration is disabled", 501
+
+    data = request.json(force=True)
+    un = data.get("username")
+    email = data.get("email")
+    fn = data.get("first_name")
+    ln = data.get("last_name")
+    oi = data.get("org_id")
+    an = data.get("account_number")
+    pw = data.get("password")
+    kc_helper.create_realm_user(un, pw, fn, ln, email, an, oi)
+    return jsonify(kc_helper.get_realm_users())

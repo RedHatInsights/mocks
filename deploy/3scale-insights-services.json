@@ -1,7 +1,7 @@
 {
   "ephemeral" : {
     "auth_proxy" : "false",
-    "services_host" : "http://mocks.bsquizza.svc.cluster.local:8080",
+    "services_host" : "http://mocks.NAMESPACE.svc.cluster.local:8080",
     "jwt_path": "/api/bop/v1/jwt",
     "services_host_proxy" : "http://127.0.0.1:9083",
     "apitoken" : "",

@@ -6,8 +6,12 @@ KEYCLOAK_CLIENT_BASE_URL = os.getenv("KEYCLOAK_CLIENT_BASE_URL", "https://front-
 KEYCLOAK_USER = os.getenv("KEYCLOAK_USER", "admin")
 KEYCLOAK_PASSWORD = os.getenv("KEYCLOAK_PASSWORD", "admin")
 KEYCLOAK_REALM = os.getenv("KEYCLOAK_REALM", "redhat-external")
-KEYCLOAK = str(os.getenv("INIT_KEYCLOAK", True)).lower() == "true"
+KEYCLOAK = str(os.getenv("KEYCLOAK", True)).lower() == "true"
 KEYCLOAK_CLIENT_ID = os.getenv("KEYCLOAK_CLIENT_ID", "cloud-services")
+
+PORT = int(os.getenv("PORT", 9000))
+
+SECRET_KEY = os.getenv("FLASK_SECRET_KEY", os.urandom(32))
 
 USERS = [
     {

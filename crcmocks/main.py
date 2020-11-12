@@ -18,6 +18,7 @@ log = logging.getLogger(__name__)
 
 
 app = Flask(__name__)
+app.config["SECRET_KEY"] = conf.SECRET_KEY
 app.register_blueprint(bop_bp, url_prefix="/api/bop")
 app.register_blueprint(entitlements_bp, url_prefix="/api/entitlements")
 app.register_blueprint(rbac_bp, url_prefix="/api/rbac")
@@ -45,7 +46,7 @@ def setup_keycloak():
 def start_flask():
     if conf.KEYCLOAK:
         setup_keycloak()
-    app.run(host="0.0.0.0", port=9000, debug=True)
+    app.run(host="0.0.0.0", port=conf.PORT, debug=True)
 
 
 @app.after_request
@@ -69,7 +70,7 @@ def get_request_data():
     return jsonify(request_data_list)
 
 
-@app.route("/_clearRequests")
+@app.route("/_clearRequests", methods=["POST"])
 def clear_request_data():
     global request_data_list
     request_data_list = []
