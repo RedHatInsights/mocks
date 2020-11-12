@@ -1,7 +1,5 @@
 #!/usr/env/bin python
 import logging
-from multiprocessing import Process
-from time import strftime
 
 from flask import Blueprint
 from flask.json import jsonify

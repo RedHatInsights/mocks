@@ -6,13 +6,12 @@ from flask import Flask
 from flask import request
 from flask.json import jsonify
 
-import requests
-
 from crcmocks.bop import blueprint as bop_bp
+from crcmocks.rbac import blueprint as rbac_bp
 from crcmocks.entitlements import blueprint as entitlements_bp
 from crcmocks.manager import blueprint as manager_bp
 from crcmocks.manager import kc_helper
-from crcmocks.rbac import rbac as rbac_bp
+import crcmocks.config as conf
 
 
 log = logging.getLogger(__name__)
@@ -29,17 +28,25 @@ request_data_list = []
 
 
 def start_flask():
-    app.run(host="0.0.0.0", port=8080, debug=True)
+    app.run(host="0.0.0.0", port=9000, debug=True)
 
 
 @app.before_first_request
 def setup_keycloak():
-    kc_helper.create_realm()
-    kc_helper.create_realm_client('cloud-services')
-    for user in conf.USERS:
-        kc_helper.create_realm_user(
-            user["username"], user["password"], user["first_name"], user["last_name"], user["email"], user["account_number"], user["org_id"]
-        )
+    if conf.INIT_KEYCLOAK:
+        kc_helper.create_realm()
+        kc_helper.create_realm_client("cloud-services")
+        for user in conf.USERS:
+            kc_helper.create_realm_user(
+                user["username"],
+                user["password"],
+                user["first_name"],
+                user["last_name"],
+                user["email"],
+                user["account_number"],
+                user["org_id"],
+            )
+
 
 @app.after_request
 def store_request(response):
