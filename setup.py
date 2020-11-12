@@ -21,6 +21,9 @@ setup(
     packages=find_packages(),
     include_package_data=True,
     install_requires=requirements,
-    classifiers=["Topic :: Utilities", "Programming Language :: Python :: 3.6",],
+    classifiers=[
+        "Topic :: Utilities",
+        "Programming Language :: Python :: 3.6",
+    ],
     python_requires=">=3.6",
 )

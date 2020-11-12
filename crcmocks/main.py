@@ -27,25 +27,25 @@ app.register_blueprint(manager_bp, url_prefix="/_manager")
 request_data_list = []
 
 
-def start_flask():
-    app.run(host="0.0.0.0", port=9000, debug=True)
-
-
-@app.before_first_request
 def setup_keycloak():
-    if conf.INIT_KEYCLOAK:
-        kc_helper.create_realm()
-        kc_helper.create_realm_client("cloud-services")
-        for user in conf.USERS:
-            kc_helper.create_realm_user(
-                user["username"],
-                user["password"],
-                user["first_name"],
-                user["last_name"],
-                user["email"],
-                user["account_number"],
-                user["org_id"],
-            )
+    kc_helper.create_realm()
+    kc_helper.create_realm_client(conf.KEYCLOAK_CLIENT_ID)
+    for user in conf.USERS:
+        kc_helper.create_realm_user(
+            user["username"],
+            user["password"],
+            user["first_name"],
+            user["last_name"],
+            user["email"],
+            user["account_number"],
+            user["org_id"],
+        )
+
+
+def start_flask():
+    if conf.KEYCLOAK:
+        setup_keycloak()
+    app.run(host="0.0.0.0", port=9000, debug=True)
 
 
 @app.after_request

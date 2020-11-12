@@ -72,6 +72,16 @@ class KeyCloakHelper:
         )
         return radmin
 
+    @cached_property
+    def openid(self):
+        self.wait_for_server()
+        return keycloak.KeycloakOpenID(
+            self.server + "/auth/",
+            realm_name=self.realm,
+            client_id=conf.KEYCLOAK_CLIENT_ID,
+            verify=False,
+        )
+
     def get_realms(self):
         return self.admin.get_realms()
 
@@ -118,7 +128,6 @@ class KeyCloakHelper:
                 "enabled": True,
                 "bearerOnly": False,
                 "publicClient": True,
-                "rootUrl": f"{self.client_base_url}",
                 "baseUrl": f"{self.client_base_url}",
                 "redirectUris": [f"{self.client_base_url}/*"],
                 "protocolMappers": protocol_mappers,
