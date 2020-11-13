@@ -111,4 +111,5 @@ You can access the mock user management APIs as described above via the mock `Ro
   * edit the SSO url in chrome to point to local keycloak
   * stand up a gateway/proxy service which sends API calls from the front-end to the mocks
 * Allow users to be created with dynamic RBAC permissions and/or entitlements
+* Add service set for `mocks` to e2e-deploy
 * Integrate with the [Clowder](http://www.github.com/RedHatInsights/clower) operator
