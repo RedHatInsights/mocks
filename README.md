@@ -18,6 +18,8 @@ When `crcmocks` starts up, it uses options defined in its [config](crcmocks/conf
 
 *NOTE*: every time `crcmocks` is restarted, it will re-intialize the users on the keycloak server. User data does *not* persist!
 
+`crcmocks` can also be deployed without a keycloak server (if, for example, you do not care about mocking SSO but want to use some of the other mock APIs). In this case, the env var `KEYCLOAK=false` should be passed to `start_crcmocks`
+
 Once you have the `crcmocks` API service running (it listens on port 9000 by default) the following APIs are provided:
 
 ### Management APIS
@@ -62,8 +64,15 @@ docker run -td --name keycloak -p 8080:8080 -e DB_VENDOR=h2 -e PROXY_ADDRESS_FOR
 ```
 docker run -td --name mocks -p 9000:9000 -e KEYCLOAK_URL="http://localhost:8080" mocks:latest
 ```
-
 You can also pull the mocks image from `quay.io/cloudservices/mocks` if you don't wish to build it.
+
+Or, if you want to run the mock APIs directly on your host instead of in a container:
+```
+python3 -m venv .venv
+source .venv/bin/activate
+pip install .
+KEYCLOAK_URL="http://localhost:8080" start_crcmocks
+```
 
 You will then need to point your application to use `localhost:9000` for BOP, RBAC, and
 entitlements API requests. You will need to update your running copy of `insights-chrome` to point
@@ -99,5 +108,8 @@ You can access the mock user management APIs as described above via the mock `Ro
 
 # TODO
 
+* Automate more of the local deployment steps to enable easy setup for local front-end development, this would include:
+  * edit the SSO url in chrome to point to local keycloak
+  * stand up a gateway/proxy service which sends API calls from the front-end to the mocks
 * Allow users to be created with dynamic RBAC permissions and/or entitlements
 * Integrate with the [Clowder](http://www.github.com/RedHatInsights/clower) operator
