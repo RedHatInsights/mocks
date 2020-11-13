@@ -1,0 +1,39 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <style>
+            table, th, td {
+                border: 1px solid black;
+                border-collapse: collapse;
+                padding: 5px;
+            }
+        </style>
+    </head>
+    <body>
+        <!--<pre>{{ rusers|tojson }}</pre>-->
+        <table>
+        <tr>
+            <th>id</th>
+            <th>username</th>
+            <th>first_name</th>
+            <th>last_name</th>
+            <th>email</th>
+            <th>org_id</th>
+            <th>account_number</th>
+        </tr>
+        {% for ruser in rusers %}
+            <tr>
+                <td>{{ ruser.id }}</td>
+                <td>{{ ruser.username }}</td>
+                <td>{{ ruser.attributes.first_name[0] }}</td>
+                <td>{{ ruser.attributes.last_name[0] }}</td>
+                <td>{{ ruser.email }}</td>
+                <td>{{ ruser.attributes.org_id[0] }}</td>
+                <td>{{ ruser.attributes.account_number[0] }}</td>
+            <tr>
+        {% endfor %}
+        </table>
+        <br>
+        <a href='{{ redirect_url }}'>add user</a>
+    </body>
+</html>

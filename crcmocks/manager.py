@@ -4,7 +4,7 @@ from flask import Blueprint
 from flask import jsonify
 from flask import request
 from flask import redirect
-from flask import render_template_string
+from flask import render_template
 from flask import url_for
 
 from flask_wtf import FlaskForm
@@ -18,75 +18,6 @@ import crcmocks.db
 
 log = logging.getLogger(__name__)
 blueprint = Blueprint("manager", __name__)
-
-USER_PAGE_TEMPLATE = """ <!DOCTYPE HTML>
-<html>
-    <head>
-        <style>
-            table, th, td {
-                border: 1px solid black;
-                border-collapse: collapse;
-                padding: 5px;
-            }
-        </style>
-    </head>
-    <body>
-        <!--<pre>{{ rusers|tojson }}</pre>-->
-        <table>
-        <tr>
-            <th>id</th>
-            <th>username</th>
-            <th>first_name</th>
-            <th>last_name</th>
-            <th>email</th>
-            <th>org_id</th>
-            <th>account_number</th>
-        </tr>
-        {% for ruser in rusers %}
-            <tr>
-                <td>{{ ruser.id }}</td>
-                <td>{{ ruser.username }}</td>
-                <td>{{ ruser.attributes.first_name[0] }}</td>
-                <td>{{ ruser.attributes.last_name[0] }}</td>
-                <td>{{ ruser.email }}</td>
-                <td>{{ ruser.attributes.org_id[0] }}</td>
-                <td>{{ ruser.attributes.account_number[0] }}</td>
-            <tr>
-        {% endfor %}
-        </table>
-        <br>
-        <a href='{{ redirect_url }}'>add user</a>
-    </body>
-</html>
-"""
-
-
-NEW_USER_FORM = """<form action="" method="post">
-        {{ form.hidden_tag() }}
-        <p>
-            {{ form.username.label }} {{ form.username }}
-        <p>
-        <p>
-            {{ form.email.label }} {{ form.email }}
-        <p>
-        </p>
-            {{ form.first_name.label }} {{ form.first_name }}
-        <p>
-        </p>
-            {{ form.last_name.label }} {{ form.last_name }}
-        <p>
-        </p>
-            {{ form.account_number.label }} {{ form.account_number }}
-        <p>
-        </p>
-            {{ form.org_id.label }} {{ form.org_id }}
-        <p>
-        </p>
-            {{ form.password.label }}{{ form.password }}
-        </p>
-        <p>{{ form.submit() }}</p>
-    </form>
-"""
 
 
 class NewUserForm(FlaskForm):
@@ -113,8 +44,8 @@ kc_helper = KeyCloakHelper(
 def ui_root():
     if not conf.KEYCLOAK:
         return "keycloak integration is disabled", 501
-    return render_template_string(
-        USER_PAGE_TEMPLATE,
+    return render_template(
+        'user_list.html',
         redirect_url=url_for("manager.ui_adduser"),
         rusers=kc_helper.get_realm_users(),
     )
@@ -155,7 +86,7 @@ def ui_adduser():
         add_user(user_data)
         return redirect(url_for("manager.ui_root"))
 
-    return render_template_string(NEW_USER_FORM, form=form)
+    return render_template('new_user_form.html', form=form)
 
 
 @blueprint.route("/users")
