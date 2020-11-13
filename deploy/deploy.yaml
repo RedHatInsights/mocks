@@ -182,6 +182,23 @@ objects:
       weight: 100
     wildcardPolicy: None
 
+- apiVersion: route.openshift.io/v1
+  kind: Route
+  metadata:
+    labels:
+      app: mocks
+    name: mocks
+  spec:
+    port:
+      targetPort: 8080-tcp
+    tls:
+      termination: edge
+    to:
+      kind: Service
+      name: mocks
+      weight: 100
+    wildcardPolicy: None
+
 parameters:
 - name: IMAGE
   value: "quay.io/cloudservices/mocks"
