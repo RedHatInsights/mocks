@@ -176,6 +176,7 @@ objects:
       targetPort: 8080-tcp
     tls:
       termination: edge
+      insecureEdgeTerminationPolicy: Redirect
     to:
       kind: Service
       name: keycloak
@@ -193,6 +194,7 @@ objects:
       targetPort: 8080-tcp
     tls:
       termination: edge
+      insecureEdgeTerminationPolicy: Redirect
     to:
       kind: Service
       name: mocks
