@@ -27,9 +27,8 @@ Once you have the `crcmocks` API service running (it listens on port 9000 by def
 * `GET /_getRequests` -- returns a list of all API requests that have come into the `crcmocks` service
 * `POST /_clearRequests` -- clears the stored list of all API requests
 * `POST /_shutdown` -- shuts down the flask API
-* `GET /_manager/user` -- returns an HTML form you can use to create a new user. You can browse to this URL on a web browser.
 * `POST /_manager/addUser` -- allows you to create new test user with JSON
-* `GET /_manager/users` -- returns JSON listing all users created in the backend
+* `GET /_manager/users` -- returns JSON listing all users created in keycloak
 
 ### Management UI
 
