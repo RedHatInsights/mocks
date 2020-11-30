@@ -12,7 +12,7 @@ rbac_response = {
         "previous": None,
         "last": "/api/rbac/v1/access/?application=&format=json&limit=1000&offset=0",
     },
-    "data": [{"resourceDefinitions": [], "permission": "insights:*:*"}],
+    "data": [{"resourceDefinitions": [], "permission": "advisor:*:*"}],
 }
 
 
