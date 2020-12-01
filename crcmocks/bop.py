@@ -45,5 +45,7 @@ def mock_send_email():
 def mock_jwt():
     if conf.KEYCLOAK:
         pubkey = keycloak_helper.openid.public_key()
-        return jsonify({"pubkey": f"-----BEGIN PUBLIC KEY-----\n{pubkey}\n-----END PUBLIC KEY-----"})
+        return jsonify(
+            {"pubkey": f"-----BEGIN PUBLIC KEY-----\n{pubkey}\n-----END PUBLIC KEY-----"}
+        )
     return "keycloak integration disabled", 404

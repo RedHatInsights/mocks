@@ -45,7 +45,7 @@ def ui_root():
     if not conf.KEYCLOAK:
         return "keycloak integration is disabled", 501
     return render_template(
-        'user_list.html',
+        "user_list.html",
         redirect_url=url_for("manager.ui_adduser"),
         rusers=kc_helper.get_realm_users(),
     )
@@ -86,7 +86,7 @@ def ui_adduser():
         add_user(user_data)
         return redirect(url_for("manager.ui_root"))
 
-    return render_template('new_user_form.html', form=form)
+    return render_template("new_user_form.html", form=form)
 
 
 @blueprint.route("/users")
