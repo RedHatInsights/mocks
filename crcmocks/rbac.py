@@ -12,7 +12,7 @@ rbac_response = {
         "previous": None,
         "last": "/api/rbac/v1/access/?application=&format=json&limit=1000&offset=0",
     },
-    "data": [{"resourceDefinitions": [], "permission": "advisor:*:*"},{"resourceDefinitions":[],"permission":"inventory:*:*"}],
+    "data": [{"resourceDefinitions": [], "permission": "advisor:*:*"},{"resourceDefinitions":[],"permission":"inventory:*:*"},{"resourceDefinitions":[],"permission":"inventory:*:read"},{"resourceDefinitions":[],"permission":"inventory:*:read"},{"resourceDefinitions":[],"permission":"inventory:*:read"},{"resourceDefinitions":[],"permission":"inventory:*:read"},{"resourceDefinitions":[],"permission":"inventory:*:read"},{"resourceDefinitions":[],"permission":"inventory:*:*"},{"resourceDefinitions":[],"permission":"inventory:*:read"},{"resourceDefinitions":[],"permission":"inventory:*:read"}],
 }
 
 
