@@ -116,9 +116,9 @@ class KeyCloakHelper:
             return
 
         protocol_mappers = [
-            self.get_mapper("account_number", mtype="int"),
-            self.get_mapper("account_id", mtype="int"),
-            self.get_mapper("org_id", mtype="int"),
+            self.get_mapper("account_number", mtype="String"),
+            self.get_mapper("account_id", mtype="String"),
+            self.get_mapper("org_id", mtype="String"),
             self.get_mapper("username", mtype="String"),
             self.get_mapper("email", mtype="String"),
             self.get_mapper("first_name", mtype="String"),
@@ -148,9 +148,9 @@ class KeyCloakHelper:
             "attributes": {
                 "first_name": fname,
                 "last_name": lname,
-                "account_id": account_id,
-                "account_number": account_id,
-                "org_id": org_id,
+                "account_id": str(account_id),
+                "account_number": str(account_id),
+                "org_id": str(org_id),
             },
             "credentials": [{"temporary": False, "type": "password", "value": password}],
         }
