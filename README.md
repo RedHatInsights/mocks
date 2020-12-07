@@ -107,10 +107,4 @@ You can access the mock user management APIs as described above via the mock `Ro
 
 # TODO
 
-* Automate more of the local deployment steps to enable easy setup for local front-end development, this would include:
-  * edit the SSO url in chrome to point to local keycloak
-  * stand up a gateway/proxy service which sends API calls from the front-end to the mocks
-  * essentially, adapt pieces of what `tool.py` in https://github.com/jctanner/aa-hacking/ does but make it generalized for any app team
-* Allow users to be created with dynamic RBAC permissions and/or entitlements
-* Add service set for `mocks` to e2e-deploy
-* Integrate with the [Clowder](http://www.github.com/RedHatInsights/clower) operator
+See [enhancements](https://github.com/RedHatInsights/mocks/labels/enhancement)
