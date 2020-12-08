@@ -16,6 +16,24 @@ PORT = int(os.getenv("PORT", 9000))
 
 SECRET_KEY = os.getenv("FLASK_SECRET_KEY", os.urandom(32))
 
+DEFAULT_SERVICES = [
+    "ansible",
+    "cost_management",
+    "insights",
+    "advisor",
+    "migrations",
+    "openshift",
+    "settings",
+    "smart_management",
+    "subscriptions",
+    "user_preferences",
+]
+
+DEFAULT_PERMISSIONS = [
+    "advisor:*:*",
+    "inventory:*:*",
+]
+
 DEFAULT_USERS = [
     {
         "username": "jdoe",
@@ -30,5 +48,7 @@ DEFAULT_USERS = [
         "org_id": "3340852",
         "is_org_admin": False,
         "is_internal": False,
+        "entitlements": ",".join(DEFAULT_SERVICES),
+        "permissions": ",".join(DEFAULT_PERMISSIONS)
     }
 ]

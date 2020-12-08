@@ -20,16 +20,20 @@
             <th>email</th>
             <th>org_id</th>
             <th>account_number</th>
+            <th>permissions</th>
+            <th>entitlements</th>
         </tr>
         {% for ruser in rusers %}
             <tr>
                 <td>{{ ruser.id }}</td>
                 <td>{{ ruser.username }}</td>
-                <td>{{ ruser.attributes.first_name[0] }}</td>
-                <td>{{ ruser.attributes.last_name[0] }}</td>
+                <td>{{ ruser.first_name }}</td>
+                <td>{{ ruser.last_name }}</td>
                 <td>{{ ruser.email }}</td>
-                <td>{{ ruser.attributes.org_id[0] }}</td>
-                <td>{{ ruser.attributes.account_number[0] }}</td>
+                <td>{{ ruser.org_id }}</td>
+                <td>{{ ruser.account_number }}</td>
+                <td>{{ ruser.permissions }}</td>
+                <td>{{ ruser.entitlements }} </td>
             <tr>
         {% endfor %}
         </table>
