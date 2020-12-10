@@ -31,6 +31,10 @@ class NewUserForm(FlaskForm):
     submit = SubmitField("submit")
 
 
+class ResetKeycloakForm(FlaskForm):
+    reset = SubmitField("Reset Keycloak")
+
+
 kc_helper = KeyCloakHelper(
     conf.KEYCLOAK_URL,
     conf.KEYCLOAK_USER,
@@ -105,3 +109,23 @@ def user():
     user_data = request.json(force=True)
     add_user(user_data)
     return jsonify(kc_helper.get_realm_users())
+
+
+@blueprint.route("/ui/resetKeycloak", methods=["POST"])
+def ui_resetkeycloak():
+    if not conf.KEYCLOAK:
+        return "keycloak integration is disabled", 501
+
+    # form = ResetKeycloakForm()
+    setup_keycloak()
+    return redirect(url_for("manager.ui_root"))
+
+
+@blueprint.route("/resetKeycloak", methods=["POST"])
+def resetkeycloak():
+    if not conf.KEYCLOAK:
+        return "keycloak integration is disabled", 501
+
+    # user_data = request.json(force=True)
+    setup_keycloak()
+    return 200
