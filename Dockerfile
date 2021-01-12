@@ -1,4 +1,5 @@
-FROM python:3
+FROM registry.access.redhat.com/ubi8/python-36
+
 ADD . /mocks
 WORKDIR /mocks
 RUN pip3 install .
