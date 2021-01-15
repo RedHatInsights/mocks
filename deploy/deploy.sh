@@ -33,9 +33,9 @@ fi
 FE_HOST=$(oc get route front-end-aggregator -o jsonpath='{.spec.host} -n $NS')
 FE_URL="https://${FE_HOST}"
 if [ ! -z "$FE_HOST" ]; then
-    oc process -f deploy.yaml -p KEYCLOAK_CLIENT_BASE_URL=$FE_URL --local=true | oc apply -f - -n $NS
+    oc process -f template.yaml -p KEYCLOAK_CLIENT_BASE_URL=$FE_URL --local=true | oc apply -f - -n $NS
 else
-    oc process -f deploy.yaml --local=true | oc apply -f - -n $NS
+    oc process -f template.yaml --local=true | oc apply -f - -n $NS
 fi
 
 kubectl rollout restart deploy/mocks
