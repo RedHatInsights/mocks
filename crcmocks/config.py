@@ -49,6 +49,6 @@ DEFAULT_USERS = [
         "is_org_admin": False,
         "is_internal": False,
         "entitlements": ",".join(DEFAULT_SERVICES),
-        "permissions": ",".join(DEFAULT_PERMISSIONS)
+        "permissions": ",".join(DEFAULT_PERMISSIONS),
     }
 ]

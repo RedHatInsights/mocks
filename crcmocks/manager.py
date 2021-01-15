@@ -49,9 +49,7 @@ def ui_root():
     if not conf.KEYCLOAK:
         return "keycloak integration is disabled", 501
     return render_template(
-        "user_list.html",
-        redirect_url=url_for("manager.ui_adduser"),
-        rusers=get_users(),
+        "user_list.html", redirect_url=url_for("manager.ui_adduser"), rusers=get_users(),
     )
 
 

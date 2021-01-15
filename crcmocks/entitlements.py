@@ -22,11 +22,16 @@ def services():
     user, username, account_number = get_user_rh_identity(identity_header)
 
     if not user:
-        return f"No user found in TinyDB with username:" \
-               f" {username} or account_number: {account_number}\n", 404
+        return (
+            f"No user found in TinyDB with username:"
+            f" {username} or account_number: {account_number}\n",
+            404,
+        )
     if len(user) > 1:
-        return f"Multiple users found with:" \
-               f" {username} or account_number: {account_number}\n", 406
+        return (
+            f"Multiple users found with:" f" {username} or account_number: {account_number}\n",
+            406,
+        )
 
     # finally get the entitlements of the user
     if user[0].get("entitlements") is not None:

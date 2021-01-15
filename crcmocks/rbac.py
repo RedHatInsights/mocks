@@ -38,11 +38,16 @@ def rbac_access():
     user, username, account_number = get_user_rh_identity(identity_header)
 
     if not user:
-        return f"No user found in TinyDB with username:" \
-               f" {username} or account_number: {account_number}\n", 404
+        return (
+            f"No user found in TinyDB with username:"
+            f" {username} or account_number: {account_number}\n",
+            404,
+        )
     if len(user) > 1:
-        return f"Multiple users found with:" \
-               f" {username} or account_number: {account_number}\n", 406
+        return (
+            f"Multiple users found with:" f" {username} or account_number: {account_number}\n",
+            406,
+        )
 
     # get the user permissions
     if user[0].get("entitlements") is not None:
@@ -52,12 +57,16 @@ def rbac_access():
 
     rbac_response = deepcopy(BASE_RBAC_RESPONSE)
     # set links
-    rbac_response["links"]["first"] = f"/api/rbac/v1/access/?application={application or ''}" \
-                                      f"&format=json&limit={limit}" \
-                                      f"&offset={offset}"
-    rbac_response["links"]["last"] = f"/api/rbac/v1/access/?application={application or ''}" \
-                                     f"&format=json&limit={limit}" \
-                                     f"&offset={offset}"
+    rbac_response["links"]["first"] = (
+        f"/api/rbac/v1/access/?application={application or ''}"
+        f"&format=json&limit={limit}"
+        f"&offset={offset}"
+    )
+    rbac_response["links"]["last"] = (
+        f"/api/rbac/v1/access/?application={application or ''}"
+        f"&format=json&limit={limit}"
+        f"&offset={offset}"
+    )
 
     limit_count = 0
     # TODO: implement 'real' pagination
@@ -65,14 +74,10 @@ def rbac_access():
         if i >= offset:
             if application:
                 if perm.split(":")[0] in application:
-                    rbac_response["data"].append(
-                        {"resourceDefinitions": [], "permission": perm}
-                    )
+                    rbac_response["data"].append({"resourceDefinitions": [], "permission": perm})
                     limit_count += 1
             else:
-                rbac_response["data"].append(
-                    {"resourceDefinitions": [], "permission": perm}
-                )
+                rbac_response["data"].append({"resourceDefinitions": [], "permission": perm})
                 limit_count += 1
             if limit_count == limit:
                 break
