@@ -7,6 +7,70 @@ metadata:
   name: mocks
 
 objects:
+- apiVersion: v1
+  kind: ServiceAccount
+  metadata:
+    name: mocks-sa
+
+- apiVersion: rbac.authorization.k8s.io/v1
+  kind: Role
+  metadata:
+    name: mocks-role
+  rules:
+  - apiGroups:
+    - ""
+    resources:
+    - secrets
+    - pods
+    verbs:
+    - get
+    - list
+    - patch
+    - update
+    - watch
+  - apiGroups:
+    - ""
+    resources:
+    - pods/exec
+    verbs:
+    - create
+    - delete
+    - get
+    - list
+    - patch
+    - update
+    - watch
+  - apiGroups:
+    - apps
+    resources:
+    - deployments
+    - deployments/scale
+    verbs:
+    - get
+    - list
+    - patch
+    - update
+    - watch
+  - apiGroups:
+    - route.openshift.io
+    resources:
+    - routes
+    verbs:
+    - get
+    - list
+
+- apiVersion: rbac.authorization.k8s.io/v1
+  kind: RoleBinding
+  metadata:
+    name: mocks-binding
+  roleRef:
+    apiGroup: rbac.authorization.k8s.io
+    kind: Role
+    name: mocks-role
+  subjects:
+  - kind: ServiceAccount
+    name: mocks-sa
+
 - apiVersion: apps/v1
   kind: Deployment
   metadata:
@@ -32,27 +96,7 @@ objects:
           app: mocks
           name: mocks
       spec:
-        affinity:
-          podAntiAffinity:
-            preferredDuringSchedulingIgnoredDuringExecution:
-            - podAffinityTerm:
-                labelSelector:
-                  matchExpressions:
-                  - key: app
-                    operator: In
-                    values:
-                    - mocks
-                topologyKey: failure-domain.beta.kubernetes.io/zone
-              weight: 100
-            - podAffinityTerm:
-                labelSelector:
-                  matchExpressions:
-                  - key: app
-                    operator: In
-                    values:
-                    - mocks
-                topologyKey: kubernetes.io/hostname
-              weight: 99
+        serviceAccountName: mocks-sa
         containers:
         - image: ${IMAGE}:${IMAGE_TAG}
           imagePullPolicy: Always
@@ -68,8 +112,18 @@ objects:
               cpu: 250m
               memory: 128Mi
           env:
-          - name: KEYCLOAK_CLIENT_BASE_URL
-            value: ${KEYCLOAK_CLIENT_BASE_URL}
+          - name: INITIALIZE_FE
+            value: ${INITIALIZE_FE}
+          - name: INITIALIZE_GW
+            value: ${INITIALIZE_GW}
+          - name: GW_MOCK_ENTITLEMENTS
+            value: ${GW_MOCK_ENTITLEMENTS}
+          - name: GW_MOCK_BOP
+            value: ${GW_MOCK_BOP}
+          - name: FE_DEPLOYMENT
+            value: ${FE_DEPLOYMENT}
+          - name: GW_DEPLOYMENT
+            value: ${GW_DEPLOYMENT}
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
         - image: ${KEYCLOAK_IMAGE}:${KEYCLOAK_IMAGE_TAG}
@@ -213,6 +267,15 @@ parameters:
 - name: REPLICAS
   description: The number of replicas to use in the deployment
   value: "1"
-- name: KEYCLOAK_CLIENT_BASE_URL
-  description: The base url to use for a redirect URI when configuring keycloak client
-  value: "https://front-end-aggregator"
+- name: INITIALIZE_FE
+  value: "true"
+- name: INITIALIZE_GW
+  value: "true"
+- name: GW_MOCK_ENTITLEMENTS
+  value: "true"
+- name: GW_MOCK_BOP
+  value: "true"
+- name: FE_DEPLOYMENT
+  value: "front-end-aggregator"
+- name: GW_DEPLOYMENT
+  value: "apicast"

@@ -5,7 +5,7 @@ from flask import Blueprint
 from flask.json import jsonify
 
 import crcmocks.config as conf
-from crcmocks.keycloak_helper import keycloak_helper
+from crcmocks.keycloak_helper import kc_helper
 import crcmocks.db
 
 blueprint = Blueprint("bop", __name__)
@@ -44,7 +44,7 @@ def mock_send_email():
 @blueprint.route("/v1/jwt", methods=["GET"])
 def mock_jwt():
     if conf.KEYCLOAK:
-        pubkey = keycloak_helper.openid.public_key()
+        pubkey = kc_helper.openid.public_key()
         return jsonify(
             {"pubkey": f"-----BEGIN PUBLIC KEY-----\n{pubkey}\n-----END PUBLIC KEY-----"}
         )
