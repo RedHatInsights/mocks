@@ -11,7 +11,7 @@ from flask_wtf import FlaskForm
 from wtforms import IntegerField, StringField, SubmitField
 from wtforms.validators import DataRequired, Optional
 
-from crcmocks.keycloak_helper import KeyCloakHelper
+from crcmocks.keycloak_helper import kc_helper
 from crcmocks.util import get_users
 import crcmocks.config as conf
 import crcmocks.db
@@ -35,21 +35,14 @@ class NewUserForm(FlaskForm):
     submit = SubmitField("submit")
 
 
-kc_helper = KeyCloakHelper(
-    conf.KEYCLOAK_URL,
-    conf.KEYCLOAK_USER,
-    conf.KEYCLOAK_PASSWORD,
-    conf.KEYCLOAK_REALM,
-    conf.KEYCLOAK_CLIENT_BASE_URL,
-)
-
-
 @blueprint.route("/ui")
 def ui_root():
     if not conf.KEYCLOAK:
         return "keycloak integration is disabled", 501
     return render_template(
-        "user_list.html", redirect_url=url_for("manager.ui_adduser"), rusers=get_users(),
+        "user_list.html",
+        redirect_url=url_for("manager.ui_adduser"),
+        rusers=get_users(),
     )
 
 

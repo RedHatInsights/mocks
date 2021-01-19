@@ -11,12 +11,15 @@ log = logging.getLogger(__name__)
 
 
 class KeyCloakHelper:
-    def __init__(self, server, username, password, realm, client_base_url):
-        self.server = server
-        self.username = username
-        self.password = password
-        self.realm = realm
-        self.client_base_url = client_base_url
+    def __init__(self):
+        self.server = conf.KEYCLOAK_URL
+        self.username = conf.KEYCLOAK_USER
+        self.password = conf.KEYCLOAK_PASSWORD
+        self.realm = conf.KEYCLOAK_REALM
+        self.client_base_url = conf.KEYCLOAK_CLIENT_BASE_URL
+
+    def reload_conf(self):
+        self.__init__()
 
     def wait_for_server(self):
         count = 1
@@ -165,10 +168,4 @@ class KeyCloakHelper:
             self.realm_admin.create_user(user_json)
 
 
-keycloak_helper = KeyCloakHelper(
-    conf.KEYCLOAK_URL,
-    conf.KEYCLOAK_USER,
-    conf.KEYCLOAK_PASSWORD,
-    conf.KEYCLOAK_REALM,
-    conf.KEYCLOAK_CLIENT_BASE_URL,
-)
+kc_helper = KeyCloakHelper()

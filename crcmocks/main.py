@@ -9,6 +9,7 @@ from flask.json import jsonify
 from crcmocks.bop import blueprint as bop_bp
 from crcmocks.rbac import blueprint as rbac_bp
 from crcmocks.entitlements import blueprint as entitlements_bp
+from crcmocks.initializer import initialize
 from crcmocks.manager import blueprint as manager_bp
 from crcmocks.manager import setup_keycloak
 import crcmocks.config as conf
@@ -30,12 +31,11 @@ def start_flask():
     logging.basicConfig(level=getattr(logging, conf.LOG_LEVEL))
     if conf.KEYCLOAK:
         setup_keycloak()
-    app.run(host="0.0.0.0", port=conf.PORT, debug=True)
+    app.run(host="0.0.0.0", port=conf.PORT, debug=True, use_reloader=False)
 
 
 @app.after_request
 def store_request(response):
-    global request_data_list
     ts = strftime("[%Y-%b-%d %H:%M]")
     request_info = {
         "timestamp": ts,
@@ -71,5 +71,11 @@ def shutdown_server():
         return "The server is shutting down!"
 
 
-if __name__ == "__main__":
+def main():
+    logging.basicConfig(level=logging.INFO)
+    initialize()
     start_flask()
+
+
+if __name__ == "__main__":
+    main()

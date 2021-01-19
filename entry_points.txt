@@ -1,2 +1,2 @@
 [console_scripts]
-start_crcmocks = crcmocks.main:start_flask
+start_crcmocks = crcmocks.main:main

@@ -3,3 +3,4 @@ python-keycloak
 flask_wtf
 requests
 tinydb
+ocviapy>=0.2.2

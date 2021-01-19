@@ -1,12 +1,24 @@
 import os
 
 
+def env_bool(var_name, default):
+    return str(os.getenv(var_name, default)).lower() == "true"
+
+
+INITIALIZE_FE = env_bool("INITIALIZE_FE", False)
+INITIALIZE_GW = env_bool("INITIALIZE_GW", False)
+GW_MOCK_ENTITLEMENTS = env_bool("GW_MOCK_ENTITLEMENTS", True)
+GW_MOCK_BOP = env_bool("GW_MOCK_BOP", True)
+
+FE_DEPLOYMENT = os.getenv("FE_DEPLOYMENT", "front-end-aggregator")
+GW_DEPLOYMENT = os.getenv("GW_DEPLOYMENT", "apicast")
+
 KEYCLOAK_URL = os.getenv("KEYCLOAK_URL", "http://keycloak:8080")
-KEYCLOAK_CLIENT_BASE_URL = os.getenv("KEYCLOAK_CLIENT_BASE_URL", "https://front-end-aggregator")
+KEYCLOAK_CLIENT_BASE_URL = os.getenv("KEYCLOAK_CLIENT_BASE_URL", f"https://{FE_DEPLOYMENT}")
 KEYCLOAK_USER = os.getenv("KEYCLOAK_USER", "admin")
 KEYCLOAK_PASSWORD = os.getenv("KEYCLOAK_PASSWORD", "admin")
 KEYCLOAK_REALM = os.getenv("KEYCLOAK_REALM", "redhat-external")
-KEYCLOAK = str(os.getenv("KEYCLOAK", True)).lower() == "true"
+KEYCLOAK = env_bool("KEYCLOAK", True)
 KEYCLOAK_CLIENT_ID = os.getenv("KEYCLOAK_CLIENT_ID", "cloud-services")
 LOG_LEVEL = "INFO"
 if os.getenv("LOG_LEVEL") in ["critical", "error", "warning", "info", "debug", "notset"]:
