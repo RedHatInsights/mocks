@@ -1,10 +1,11 @@
+import uuid
 import pytest
 from flask import Flask
 from crcmocks.accounts_mgmt import accounts_mgmt
 from crcmocks.accounts_mgmt import MissingAuth, process_headers, BadBearerTokenValue
 
 # Unit tests of the mocked accounts_mgmt endpoints
-from crcmocks.db import upsert_org
+from crcmocks.accounts_mgmt_db.accessors import insert_account_mapping, upsert_org
 
 app = Flask(__name__)
 app.register_blueprint(accounts_mgmt, url_prefix="")
@@ -53,10 +54,20 @@ def test_cluster_registrations():
 
 def test_get_account():
     """ Confirm the endpoint gives us an organization id. """
+    non_existent_account = "fake_account"
     some_account = "12345"
     resource = f"/api/accounts_mgmt/v1/accounts/{some_account}"
     headers = {"Authorization": "Bearer potatosalad"}
     with app.test_client() as client:
+
+        non_existent_resource = f"/api/accounts_mgmt/v1/accounts/{non_existent_account}"
+        response = client.get(non_existent_resource, headers=headers)
+        assert response.status_code == 404
+
+        # TODO: Upsert the account to be found
+        some_org = f"new_org{uuid.uuid4()}"
+        upsert_org(some_org, "ebs_account12345", "external_id54321")
+        insert_account_mapping(some_account, some_org)
         response = client.get(resource, headers=headers)
         items = response.json["items"]
         assert items[0]["organization"]["id"]

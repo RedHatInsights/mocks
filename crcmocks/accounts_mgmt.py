@@ -6,7 +6,7 @@ from flask import request
 
 # Mocks of some basic accounts_mgmt API endpoints needed for testing uhc-auth-proxy
 # API ref: https://api.openshift.com/?urls.primaryName=Accounts%20management%20service
-from crcmocks.db import get_org
+from crcmocks.accounts_mgmt_db.accessors import get_org_by_id, get_account_by_id
 
 accounts_mgmt = Blueprint("accounts_mgmt", __name__)
 
@@ -33,7 +33,6 @@ def process_headers(headers: dict):
 def cluster_registrations():
     """"""
     example_request_body = {"authorization_token": "string", "cluster_id": "string"}
-
     # Check the headers
     try:
         token = process_headers(dict(request.headers))
@@ -54,6 +53,7 @@ def cluster_registrations():
     if not (cluster_id and authorization_token):
         return "Body needs cluster_id and authorization_token", 400
 
+    # TODO: Some sort of look up to get the account_id related to the auth token?
     registration_response = {
         "account_id": str(uuid.uuid4()),
         "authorization_token": token,
@@ -78,8 +78,14 @@ def get_accounts(account: str):
     if request.method != "GET":
         return "This endpoint only supports GET", 405
 
+    # TODO: Get account, see if it exists. If it doesn't, return a 404.
+    account_details = get_account_by_id(account)
+    if not account_details:
+        return f"Account with id {account} does not exist", 404
+
     # TODO: Get the org id for the specified account
 
+    # TODO: Identify the fields that uhc-auth-proxy actually cares about
     example_response = {
         "kind": "string",
         "page": 0,
@@ -187,7 +193,7 @@ def get_organizations(org: str):
         return "This endpoint only supports GET", 405
 
     # TODO: Consider adding some temporary persistence and look-up logic to make this more realistic
-    org_details = get_org(org)
+    org_details = get_org_by_id(org)
 
     # The main values uhc-auth-proxy cares about are ebs_account_id and external_id
     ebs_account_id = org_details.get("ebs_account")
