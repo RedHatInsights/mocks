@@ -34,7 +34,7 @@ def services():
         )
 
     # finally get the entitlements of the user
-    if user[0].get("entitlements") is not None:
+    if user[0].get("entitlements"):
         entitled_services = user[0]["entitlements"].split(",")
     else:
         entitled_services = DEFAULT_SERVICES.copy()

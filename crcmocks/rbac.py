@@ -50,7 +50,7 @@ def rbac_access():
         )
 
     # get the user permissions
-    if user[0].get("entitlements") is not None:
+    if user[0].get("permissions"):
         permissions = user[0]["permissions"].split(",")
     else:
         permissions = DEFAULT_PERMISSIONS.copy()
