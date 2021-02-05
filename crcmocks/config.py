@@ -43,7 +43,14 @@ DEFAULT_SERVICES = [
 
 DEFAULT_PERMISSIONS = [
     "advisor:*:*",
+    "compliance:*:*",
     "inventory:*:*",
+    "migration-analytics:*:*",
+    "patch:*:*",
+    "policies:*:*",
+    "remediations:*:*",
+    "subscriptions:*:*",
+    "vulnerability:*:*"
 ]
 
 DEFAULT_USERS = [
@@ -60,6 +67,22 @@ DEFAULT_USERS = [
         "org_id": "3340852",
         "is_org_admin": False,
         "is_internal": False,
+        "entitlements": ",".join(DEFAULT_SERVICES),
+        "permissions": ",".join(DEFAULT_PERMISSIONS),
+    },
+    {
+        "username": "org-admin",
+        "id": 12345678,
+        "account_number": "0369235",
+        "email": "org-admin@acme.com",
+        "first_name": "Org",
+        "last_name": "Admin",
+        "address_string": '"Org Admin" org-admin@acme.com',
+        "is_active": True,
+        "password": "redhat",
+        "org_id": "3340853",
+        "is_org_admin": True,
+        "is_internal": True,
         "entitlements": ",".join(DEFAULT_SERVICES),
         "permissions": ",".join(DEFAULT_PERMISSIONS),
     }
