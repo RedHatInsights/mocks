@@ -54,9 +54,12 @@ def add_user(user_data):
     oi = user_data.get("org_id")
     an = user_data.get("account_number")
     pw = user_data.get("password")
+    io = user_data.get("is_org_admin")
+    ii = user_data.get("is_internal")
+    ia = user_data.get("is_active")
 
     # we don't add entitlements/permission to keycloak
-    kc_helper.upsert_realm_user(un, pw, fn, ln, email, an, oi)
+    kc_helper.upsert_realm_user(un, pw, fn, ln, email, an, oi, io, ii, ia)
     crcmocks.db.add_user(user_data)
     log.info("added/updated user: %s", un)
 
