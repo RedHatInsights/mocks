@@ -2,19 +2,21 @@ import logging
 
 from flask import Blueprint
 from flask import jsonify
-from flask import request
 from flask import redirect
 from flask import render_template
+from flask import request
 from flask import url_for
-
 from flask_wtf import FlaskForm
-from wtforms import IntegerField, StringField, SubmitField
-from wtforms.validators import DataRequired, Optional
+from wtforms import IntegerField
+from wtforms import StringField
+from wtforms import SubmitField
+from wtforms.validators import DataRequired
+from wtforms.validators import Optional
 
-from crcmocks.keycloak_helper import kc_helper
-from crcmocks.util import get_users
 import crcmocks.config as conf
 import crcmocks.db
+from crcmocks.keycloak_helper import kc_helper
+from crcmocks.util import get_users
 
 
 log = logging.getLogger(__name__)

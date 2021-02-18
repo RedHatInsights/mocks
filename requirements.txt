@@ -1,4 +1,5 @@
 flask
+pre-commit
 python-keycloak
 flask_wtf
 requests

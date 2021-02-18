@@ -1,11 +1,11 @@
 from copy import deepcopy
 
-from flask import jsonify
 from flask import Blueprint
+from flask import jsonify
 from flask import request
 
-from crcmocks.util import get_user_rh_identity
 from crcmocks.config import DEFAULT_PERMISSIONS
+from crcmocks.util import get_user_rh_identity
 
 
 blueprint = Blueprint("rbac", __name__)

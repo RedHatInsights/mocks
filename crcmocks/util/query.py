@@ -1,8 +1,8 @@
 import json
 from base64 import b64decode
 
-from crcmocks.db import user_db
 from crcmocks.db import query
+from crcmocks.db import user_db
 
 
 def get_user_rh_identity(identity_header):

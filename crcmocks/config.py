@@ -50,7 +50,7 @@ DEFAULT_PERMISSIONS = [
     "policies:*:*",
     "remediations:*:*",
     "subscriptions:*:*",
-    "vulnerability:*:*"
+    "vulnerability:*:*",
 ]
 
 DEFAULT_USERS = [
@@ -85,5 +85,5 @@ DEFAULT_USERS = [
         "is_internal": True,
         "entitlements": ",".join(DEFAULT_SERVICES),
         "permissions": ",".join(DEFAULT_PERMISSIONS),
-    }
+    },
 ]

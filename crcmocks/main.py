@@ -6,14 +6,14 @@ from flask import Flask
 from flask import request
 from flask.json import jsonify
 
+import crcmocks.config as conf
+import crcmocks.db
 from crcmocks.bop import blueprint as bop_bp
-from crcmocks.rbac import blueprint as rbac_bp
 from crcmocks.entitlements import blueprint as entitlements_bp
 from crcmocks.initializer import initialize
 from crcmocks.manager import blueprint as manager_bp
 from crcmocks.manager import setup_keycloak
-import crcmocks.config as conf
-import crcmocks.db
+from crcmocks.rbac import blueprint as rbac_bp
 
 
 log = logging.getLogger(__name__)
