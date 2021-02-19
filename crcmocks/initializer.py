@@ -2,7 +2,10 @@ import base64
 import json
 import logging
 
-from ocviapy import oc, get_json, scale_down_up, get_associated_pods
+from ocviapy import get_associated_pods
+from ocviapy import get_json
+from ocviapy import oc
+from ocviapy import scale_down_up
 
 import crcmocks.config as conf
 from crcmocks.keycloak_helper import kc_helper

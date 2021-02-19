@@ -126,6 +126,9 @@ class KeyCloakHelper:
             self.get_mapper("email", mtype="String"),
             self.get_mapper("first_name", mtype="String"),
             self.get_mapper("last_name", mtype="String"),
+            self.get_mapper("is_org_admin", mtype="boolean"),
+            self.get_mapper("is_internal", mtype="boolean"),
+            self.get_mapper("is_active", mtype="boolean"),
         ]
 
         # TODO: service accouts enabled == True, authorization enabled = True
@@ -141,7 +144,19 @@ class KeyCloakHelper:
             }
         )
 
-    def upsert_realm_user(self, uname, password, fname, lname, email, account_id, org_id):
+    def upsert_realm_user(
+        self,
+        uname,
+        password,
+        fname,
+        lname,
+        email,
+        account_id,
+        org_id,
+        is_org_admin,
+        is_internal,
+        is_active,
+    ):
         user_json = {
             "enabled": True,
             "username": uname,
@@ -154,6 +169,9 @@ class KeyCloakHelper:
                 "account_id": str(account_id),
                 "account_number": str(account_id),
                 "org_id": str(org_id),
+                "is_internal": is_internal,
+                "is_org_admin": is_org_admin,
+                "is_active": is_active,
             },
             "credentials": [{"temporary": False, "type": "password", "value": password}],
         }

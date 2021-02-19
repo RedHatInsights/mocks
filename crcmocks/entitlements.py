@@ -1,5 +1,5 @@
-from flask import jsonify
 from flask import Blueprint
+from flask import jsonify
 from flask import request
 
 from crcmocks.config import DEFAULT_SERVICES

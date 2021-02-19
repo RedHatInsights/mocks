@@ -2,19 +2,21 @@ import logging
 
 from flask import Blueprint
 from flask import jsonify
-from flask import request
 from flask import redirect
 from flask import render_template
+from flask import request
 from flask import url_for
-
 from flask_wtf import FlaskForm
-from wtforms import IntegerField, StringField, SubmitField
-from wtforms.validators import DataRequired, Optional
+from wtforms import IntegerField
+from wtforms import StringField
+from wtforms import SubmitField
+from wtforms.validators import DataRequired
+from wtforms.validators import Optional
 
-from crcmocks.keycloak_helper import kc_helper
-from crcmocks.util import get_users
 import crcmocks.config as conf
 import crcmocks.db
+from crcmocks.keycloak_helper import kc_helper
+from crcmocks.util import get_users
 
 
 log = logging.getLogger(__name__)
@@ -54,9 +56,12 @@ def add_user(user_data):
     oi = user_data.get("org_id")
     an = user_data.get("account_number")
     pw = user_data.get("password")
+    io = user_data.get("is_org_admin")
+    ii = user_data.get("is_internal")
+    ia = user_data.get("is_active")
 
     # we don't add entitlements/permission to keycloak
-    kc_helper.upsert_realm_user(un, pw, fn, ln, email, an, oi)
+    kc_helper.upsert_realm_user(un, pw, fn, ln, email, an, oi, io, ii, ia)
     crcmocks.db.add_user(user_data)
     log.info("added/updated user: %s", un)
 
