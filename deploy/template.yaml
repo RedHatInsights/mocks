@@ -263,7 +263,7 @@ parameters:
 - name: KEYCLOAK_IMAGE
   value: "quay.io/keycloak/keycloak"
 - name: KEYCLOAK_IMAGE_TAG
-  value: "latest"
+  value: "11.0.3"
 - name: REPLICAS
   description: The number of replicas to use in the deployment
   value: "1"
