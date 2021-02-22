@@ -48,7 +48,7 @@ def ui_root():
     )
 
 
-def add_user(user_data):
+def add_user(user_data, skip_if_exists=False):
     un = user_data.get("username")
     email = user_data.get("email")
     fn = user_data.get("first_name")
@@ -60,10 +60,9 @@ def add_user(user_data):
     ii = user_data.get("is_internal")
     ia = user_data.get("is_active")
 
-    # we don't add entitlements/permission to keycloak
-    kc_helper.upsert_realm_user(un, pw, fn, ln, email, an, oi, io, ii, ia)
-    crcmocks.db.add_user(user_data)
-    log.info("added/updated user: %s", un)
+    # we don't add entitlements/permissions to keycloak
+    kc_helper.upsert_realm_user(un, pw, fn, ln, email, an, oi, io, ii, ia, skip_if_exists)
+    crcmocks.db.add_user(user_data, skip_if_exists)
 
 
 def setup_keycloak():
@@ -71,9 +70,8 @@ def setup_keycloak():
     kc_helper.wait_for_server()
     kc_helper.create_realm()
     kc_helper.create_realm_client(conf.KEYCLOAK_CLIENT_ID)
-    kc_helper.delete_all_realm_users()
     for user in conf.DEFAULT_USERS:
-        add_user(user)
+        add_user(user, skip_if_exists=True)
 
 
 @blueprint.route("/ui/addUser", methods=["GET", "POST"])
@@ -106,4 +104,16 @@ def user():
 
     user_data = request.json(force=True)
     add_user(user_data)
+    return jsonify(get_users())
+
+
+@blueprint.route("/resetUsers", methods=["POST"])
+def reset_users():
+    if not conf.KEYCLOAK:
+        return "keycloak integration is disabled", 501
+
+    kc_helper.delete_all_realm_users()
+    crcmocks.db.clear_users()
+
+    setup_keycloak()
     return jsonify(get_users())
