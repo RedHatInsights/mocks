@@ -29,6 +29,7 @@ Once you have the `crcmocks` API service running (it listens on port 9000 by def
 * `POST /_shutdown` -- shuts down the flask API
 * `POST /_manager/addUser` -- allows you to create new test user with JSON
 * `GET /_manager/users` -- returns JSON listing all users created in keycloak
+* `POST /_manager/resetUsers` -- resets users back to default configurations
 
 ### Management UI
 

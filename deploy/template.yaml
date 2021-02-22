@@ -71,11 +71,34 @@ objects:
   - kind: ServiceAccount
     name: mocks-sa
 
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    name: mocks-data
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: "1Gi"
+
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    name: keycloak-data
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: "1Gi"
+
 - apiVersion: apps/v1
   kind: Deployment
   metadata:
     labels:
       app: mocks
+      name: mocks
     name: mocks
   spec:
     minReadySeconds: 15
@@ -86,10 +109,7 @@ objects:
       matchLabels:
         name: mocks
     strategy:
-      rollingUpdate:
-        maxSurge: 25%
-        maxUnavailable: 25%
-      type: RollingUpdate
+      type: Recreate
     template:
       metadata:
         labels:
@@ -126,6 +146,46 @@ objects:
             value: ${GW_DEPLOYMENT}
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /opt/tinydb/data/
+            name: mocks-data
+        dnsPolicy: ClusterFirst
+        imagePullSecrets:
+        - name: quay-cloudservices-pull
+        - name: rh-registry-pull
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - name: mocks-data
+          persistentVolumeClaim:
+            claimName: mocks-data
+
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    labels:
+      app: mocks
+      name: keycloak
+    name: keycloak
+  spec:
+    minReadySeconds: 15
+    progressDeadlineSeconds: 600
+    replicas: ${{REPLICAS}}
+    revisionHistoryLimit: 9
+    selector:
+      matchLabels:
+        name: keycloak
+    strategy:
+      type: Recreate
+    template:
+      metadata:
+        labels:
+          app: mocks
+          name: keycloak
+      spec:
+        containers:
         - image: ${KEYCLOAK_IMAGE}:${KEYCLOAK_IMAGE_TAG}
           imagePullPolicy: Always
           name: keycloak
@@ -144,12 +204,15 @@ objects:
           resources:
             limits:
               cpu: 500m
-              memory: 512Mi
+              memory: 1024Mi
             requests:
               cpu: 250m
-              memory: 128Mi
+              memory: 512Mi
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /opt/jboss/keycloak/standalone/data/
+            name: keycloak-data
         dnsPolicy: ClusterFirst
         imagePullSecrets:
         - name: quay-cloudservices-pull
@@ -158,6 +221,10 @@ objects:
         schedulerName: default-scheduler
         securityContext: {}
         terminationGracePeriodSeconds: 30
+        volumes:
+        - name: keycloak-data
+          persistentVolumeClaim:
+            claimName: keycloak-data
 
 - apiVersion: v1
   kind: Service
@@ -171,6 +238,7 @@ objects:
       targetPort: 9000
     selector:
       app: mocks
+      name: mocks
     sessionAffinity: None
     type: ClusterIP
 
@@ -216,6 +284,7 @@ objects:
       targetPort: 8080
     selector:
       app: mocks
+      name: keycloak
     sessionAffinity: None
     type: ClusterIP
 

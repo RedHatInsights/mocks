@@ -156,6 +156,7 @@ class KeyCloakHelper:
         is_org_admin,
         is_internal,
         is_active,
+        skip_if_exists=False,
     ):
         user_json = {
             "enabled": True,
@@ -178,12 +179,17 @@ class KeyCloakHelper:
         for user in self.get_realm_users():
             if user["username"] == uname:
                 # user already exists
+                if skip_if_exists:
+                    log.info("skipping localdb update for existing user: %s", uname)
+                    break
                 user_id = user["id"]
                 self.realm_admin.update_user(user_id, user_json)
+                log.info("updated user in keycloak: %s", uname)
                 break
         else:
             # user does not already exist
             self.realm_admin.create_user(user_json)
+            log.info("created user in keycloak: %s", uname)
 
 
 kc_helper = KeyCloakHelper()

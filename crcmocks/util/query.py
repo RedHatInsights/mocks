@@ -1,7 +1,7 @@
 import json
 from base64 import b64decode
 
-from crcmocks.db import query
+from crcmocks.db import User
 from crcmocks.db import user_db
 
 
@@ -17,7 +17,7 @@ def get_user_rh_identity(identity_header):
     # lookup the user in tinyDB, based on the identity
     return (
         user_db.search(
-            (query.account_number.search(str(account_number))) | (query.username == username)
+            (User.account_number.search(str(account_number))) | (User.username == username)
         ),
         username,
         account_number,
@@ -30,5 +30,7 @@ def get_users():
 
     This is different from kc_helper.get_realm_users() in that it returns permission/entitlement
     information, which is not stored in keycloak.
+
+    Perhaps in future this function will allow for some filtering of results as well
     """
     return user_db.all()
