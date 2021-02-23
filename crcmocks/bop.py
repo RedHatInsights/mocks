@@ -6,7 +6,7 @@ from flask.json import jsonify
 
 import crcmocks.config as conf
 from crcmocks.keycloak_helper import kc_helper
-from crcmocks.util import get_users
+from crcmocks.db import all_users
 
 blueprint = Blueprint("bop", __name__)
 
@@ -33,7 +33,7 @@ def filter_fields(user_data_list):
 
 @blueprint.route("/v1/users", methods=["POST"])
 def mock_users():
-    return jsonify(filter_fields(get_users()))
+    return jsonify(filter_fields(all_users()))
 
 
 @blueprint.route("/v1/sendEmails", methods=["POST"])

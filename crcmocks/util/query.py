@@ -22,15 +22,3 @@ def get_user_rh_identity(identity_header):
         username,
         account_number,
     )
-
-
-def get_users():
-    """
-    Get all users in TinyDB.
-
-    This is different from kc_helper.get_realm_users() in that it returns permission/entitlement
-    information, which is not stored in keycloak.
-
-    Perhaps in future this function will allow for some filtering of results as well
-    """
-    return user_db.all()

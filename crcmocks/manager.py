@@ -16,7 +16,6 @@ from wtforms.validators import Optional
 import crcmocks.config as conf
 import crcmocks.db
 from crcmocks.keycloak_helper import kc_helper
-from crcmocks.util import get_users
 
 
 log = logging.getLogger(__name__)
@@ -44,7 +43,7 @@ def ui_root():
     return render_template(
         "user_list.html",
         redirect_url=url_for("manager.ui_adduser"),
-        rusers=get_users(),
+        rusers=crcmocks.db.all_users(),
     )
 
 
@@ -94,7 +93,7 @@ def users():
     if not conf.KEYCLOAK:
         return "keycloak integration is disabled", 501
 
-    return jsonify(get_users())
+    return jsonify(crcmocks.db.all_users())
 
 
 @blueprint.route("/addUser", methods=["POST"])
@@ -104,7 +103,7 @@ def user():
 
     user_data = request.json(force=True)
     add_user(user_data)
-    return jsonify(get_users())
+    return jsonify(crcmocks.db.all_users())
 
 
 @blueprint.route("/resetUsers", methods=["POST"])
@@ -116,4 +115,4 @@ def reset_users():
     crcmocks.db.clear_users()
 
     setup_keycloak()
-    return jsonify(get_users())
+    return jsonify(crcmocks.db.all_users())
