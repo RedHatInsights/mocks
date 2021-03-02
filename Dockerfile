@@ -19,6 +19,8 @@ RUN pip3 install --no-cache .
 
 EXPOSE 8080
 
+RUN mkdir -p /opt/tinydb/data/ && chmod -R a+rwx /opt/tinydb/data/
+
 USER 1001
 
 CMD ["start_crcmocks"]
