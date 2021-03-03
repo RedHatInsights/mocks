@@ -132,17 +132,20 @@ class KeyCloakHelper:
         ]
 
         # TODO: service accouts enabled == True, authorization enabled = True
-        self.realm_admin.create_client(
-            {
-                "clientId": client,
-                "enabled": True,
-                "bearerOnly": False,
-                "publicClient": True,
-                "baseUrl": f"{self.client_base_url}",
-                "redirectUris": [f"{self.client_base_url}/*"],
-                "protocolMappers": protocol_mappers,
-            }
-        )
+        post_body = {
+            "clientId": client,
+            "enabled": True,
+            "bearerOnly": False,
+            "publicClient": True,
+            "redirectUris": [self.client_base_url],
+            "webOrigins": [self.client_base_url],
+            "protocolMappers": protocol_mappers,
+        }
+        if self.client_base_url.startswith("http"):
+            post_body["baseUrl"] = self.client_base_url
+            post_body["redirectUris"] = [uri + "/*" for uri in post_body["redirectUris"]]
+
+        self.realm_admin.create_client(post_body)
 
     def upsert_realm_user(
         self,
