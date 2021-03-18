@@ -254,6 +254,7 @@ objects:
       targetPort: 9000
     selector:
       app: mocks
+      name: mocks
     sessionAffinity: None
     type: ClusterIP
 
@@ -269,6 +270,7 @@ objects:
       targetPort: 9000
     selector:
       app: mocks
+      name: mocks
     sessionAffinity: None
     type: ClusterIP
 
