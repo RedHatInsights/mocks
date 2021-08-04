@@ -42,9 +42,12 @@ Once you have the `crcmocks` API service running (it listens on port 9000 by def
 * `GET /api/entitlements/v1/services` -- returns a canned response stating the user is entitled for a variety of services
 
 ### BOP
-* `POST /api/bop/v1/users` -- returns a mocked BOP response listing all users that have been created in `crcmocks`
 * `GET /api/bop/v1/jwt` -- if keycloak is in use, returns the pubkey for the realm configured on the local keycloak deployment.
 * `GET /api/bop/v1/sendEmails` -- accepts a POST and simply stores the incoming request so it can be read later, allowing you to test if your application sent an email to the right users with the right subject/body/etc.
+* `POST /api/bop/v1/users`,<br>
+  `POST /api/bop/v1/accounts/<accountNumber>/usersBy`,<br>
+  `GET /api/bop/v2/accounts/<accountNumber>/users`<br>
+  -- returns a mocked BOP response listing all users, filtered, that have been created in `crcmocks`
 
 # Deploying
 
