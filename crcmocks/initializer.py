@@ -55,29 +55,17 @@ def initialize_fe(namespace):
     if not keycloak_host:
         raise Exception("Unable to find route named 'keycloak'")
 
-    chrome_js = "/all/code/chrome/js/chrome.*.js"
     fe_pod = fe_pods[0]["metadata"]["name"]
+    cmd = (
+        f"cd /all/code/chrome/js && "
+        "for f in `ls *.js`; "
+        f"do sed -i s/{qa_host}/{keycloak_host}/g $f && "
+        "rm $f.gz && "
+        "gzip --keep $f; "
+        "done"
+    )
 
-    oc(
-        "exec",
-        fe_pod,
-        "-n",
-        namespace,
-        "--",
-        "/bin/bash",
-        "-c",
-        f"sed -i s/{qa_host}/{keycloak_host}/g {chrome_js}",
-    )
-    oc(
-        "exec",
-        fe_pod,
-        "-n",
-        namespace,
-        "--",
-        "/bin/bash",
-        "-c",
-        f"rm {chrome_js}.gz && gzip --keep {chrome_js}",
-    )
+    oc("exec", fe_pod, "-n", namespace, "--", "/bin/bash", "-c", cmd)
 
 
 def initialize_gw(namespace):
