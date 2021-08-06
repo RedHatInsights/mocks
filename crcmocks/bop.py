@@ -20,14 +20,9 @@ filter_maps = {
     "principalStartsWith": ["username", "partial"],
     "users": ["username", "partial"],
     "status": ["is_active", "exact"],
-    "admin_only": ["is_org_admin", "exact"]
+    "admin_only": ["is_org_admin", "exact"],
 }
-value_maps = {
-    "disabled": False,
-    "enabled": True,
-    "false": False,
-    "true": True
-}
+value_maps = {"disabled": False, "enabled": True, "false": False, "true": True}
 
 
 def filter_fields(user_data_list, keys):
