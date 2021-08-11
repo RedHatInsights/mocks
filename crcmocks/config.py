@@ -76,7 +76,7 @@ DEFAULT_USERS = [
     {
         "username": "org-admin",
         "id": 123456782,
-        "account_number": "6089719",
+        "account_number": "6089720",
         "email": "org-admin@acme.com",
         "first_name": "Org",
         "last_name": "Admin",
@@ -93,7 +93,7 @@ DEFAULT_USERS = [
     {
         "username": "non-org-admin",
         "id": 123456783,
-        "account_number": "6089719",
+        "account_number": "6089721",
         "email": "non-org-admin@acme.com",
         "first_name": "Non Org",
         "last_name": "Admin",
@@ -110,7 +110,7 @@ DEFAULT_USERS = [
     {
         "username": "iqe_rbac_admin",
         "id": 123456784,
-        "account_number": "6089719",
+        "account_number": "6089722",
         "email": "iqe_rbac_admin@redhat.com",
         "first_name": "RBAC",
         "last_name": "Admin",
@@ -126,7 +126,7 @@ DEFAULT_USERS = [
     {
         "username": "iqe_normal_user",
         "id": 123456785,
-        "account_number": "6089719",
+        "account_number": "6089723",
         "email": "iqe_normal_user@redhat.com",
         "first_name": "RBAC",
         "last_name": "Normal",
@@ -142,7 +142,7 @@ DEFAULT_USERS = [
     {
         "username": "iqe_rbac_on_rbac",
         "id": 123456786,
-        "account_number": "6089719",
+        "account_number": "6089724",
         "email": "iqe_rbac_on_rbac@redhat.com",
         "first_name": "RBAC",
         "last_name": "onRBAC",
