@@ -14,6 +14,26 @@ from crcmocks.keycloak_helper import kc_helper
 log = logging.getLogger(__name__)
 
 
+def create_service(namespace, name, src_port):
+    """
+    Create a Service resource that points the name/src_port towards the mocks pod
+    """
+    svc = {
+        "apiVersion": "v1",
+        "kind": "Service",
+        "metadata": {"name": name},
+        "spec": {
+            "ports": [
+                {"name": f"{src_port}-tcp", "port": src_port, "protocol": "TCP", "targetPort": 9000}
+            ],
+            "selector": {"app": "mocks", "name": "mocks"},
+            "sessionAffinity": "None",
+            "type": "ClusterIP",
+        },
+    }
+    oc("apply", "-f", "-", "-n", namespace, _in=json.dumps(svc))
+
+
 def initialize():
     namespace = None
     if conf.INITIALIZE_FE or conf.INITIALIZE_GW:
@@ -29,6 +49,10 @@ def initialize():
         initialize_fe(namespace)
     if conf.INITIALIZE_GW:
         initialize_gw(namespace)
+    if conf.MOCK_RBAC:
+        create_service(namespace, "rbac", 8080)
+    if conf.MOCK_ENTITLEMENTS:
+        create_service(namespace, "entitlements-api-go", 3000)
 
 
 def initialize_fe(namespace):
@@ -75,7 +99,7 @@ def initialize_gw(namespace):
 
     secret = get_json("secret", "apicast-insights-3scale-config")
 
-    if conf.GW_MOCK_ENTITLEMENTS:
+    if conf.MOCK_ENTITLEMENTS:
         log.info("Updating gateway config to use mock entitlements")
 
         entitlements_conf = json.loads(
@@ -89,7 +113,7 @@ def initialize_gw(namespace):
             json.dumps(entitlements_conf).encode()
         ).decode()
 
-    if conf.GW_MOCK_BOP:
+    if conf.MOCK_BOP:
         log.info("Updating gateway config to use mock BOP")
         services_conf = json.loads(
             base64.urlsafe_b64decode(secret["data"]["insights_services.json"])

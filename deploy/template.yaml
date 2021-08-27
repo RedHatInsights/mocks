@@ -136,10 +136,12 @@ objects:
             value: ${INITIALIZE_FE}
           - name: INITIALIZE_GW
             value: ${INITIALIZE_GW}
-          - name: GW_MOCK_ENTITLEMENTS
-            value: ${GW_MOCK_ENTITLEMENTS}
-          - name: GW_MOCK_BOP
-            value: ${GW_MOCK_BOP}
+          - name: MOCK_ENTITLEMENTS
+            value: ${MOCK_ENTITLEMENTS}
+          - name: MOCK_RBAC
+            value: ${MOCK_RBAC}
+          - name: MOCK_BOP
+            value: ${MOCK_BOP}
           - name: FE_DEPLOYMENT
             value: ${FE_DEPLOYMENT}
           - name: GW_DEPLOYMENT
@@ -245,38 +247,6 @@ objects:
 - apiVersion: v1
   kind: Service
   metadata:
-    name: rbac
-  spec:
-    ports:
-    - name: 8080-tcp
-      port: 8080
-      protocol: TCP
-      targetPort: 9000
-    selector:
-      app: mocks
-      name: mocks
-    sessionAffinity: None
-    type: ClusterIP
-
-- apiVersion: v1
-  kind: Service
-  metadata:
-    name: entitlements-api-go
-  spec:
-    ports:
-    - name: 3000-tcp
-      port: 3000
-      protocol: TCP
-      targetPort: 9000
-    selector:
-      app: mocks
-      name: mocks
-    sessionAffinity: None
-    type: ClusterIP
-
-- apiVersion: v1
-  kind: Service
-  metadata:
     name: keycloak
   spec:
     ports:
@@ -342,9 +312,11 @@ parameters:
   value: "true"
 - name: INITIALIZE_GW
   value: "true"
-- name: GW_MOCK_ENTITLEMENTS
+- name: MOCK_ENTITLEMENTS
   value: "true"
-- name: GW_MOCK_BOP
+- name: MOCK_BOP
+  value: "true"
+- name: MOCK_RBAC
   value: "true"
 - name: FE_DEPLOYMENT
   value: "front-end-aggregator"
