@@ -15,12 +15,12 @@ blueprint = Blueprint("bop", __name__)
 log = logging.getLogger(__name__)
 
 filter_maps = {
-    "primaryEmail": ["email", "exact"],
-    "emailStartsWith": ["email", "partial"],
-    "principalStartsWith": ["username", "partial"],
-    "users": ["username", "partial"],
-    "status": ["is_active", "exact"],
-    "admin_only": ["is_org_admin", "exact"],
+    "primaryEmail": ["email", "exact", None],
+    "emailStartsWith": ["email", "partial", None],
+    "principalStartsWith": ["username", "partial", None],
+    "users": ["username", "partial", None],
+    "status": ["is_active", "exact", None],
+    "admin_only": ["is_org_admin", "exact", True],
 }
 value_maps = {"disabled": False, "enabled": True, "false": False, "true": True}
 
@@ -41,7 +41,7 @@ def filter_fields(user_data_list, keys):
 
             for k in filter_keys:
                 if k in filter_maps.keys():
-                    [field, criteria] = filter_maps[k]
+                    [field, criteria, check_if] = filter_maps[k]
                     value = filters[k]
 
                     if not type(value) is list:
@@ -54,7 +54,14 @@ def filter_fields(user_data_list, keys):
                             v = value_maps[v]
 
                         if not exact and not partial:
-                            exact = v == user[field]
+                            if check_if is None:
+                                exact = v == user[field]
+                            else:
+                                if check_if == v:
+                                    exact = v == user[field]
+                                else:
+                                    exact = True
+
                             if type(user[field]) is str:
                                 partial = user[field].startswith(v)
 
