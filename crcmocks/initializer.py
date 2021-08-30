@@ -37,6 +37,10 @@ def create_service(namespace, name, src_port):
     oc("apply", "-f", "-", "-n", namespace, _in=json.dumps(svc))
 
 
+def initialized():
+    return INITIALIZED
+
+
 def initialize():
     global INITIALIZED
 
