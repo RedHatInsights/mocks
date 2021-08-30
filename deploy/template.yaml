@@ -58,6 +58,17 @@ objects:
     verbs:
     - get
     - list
+  - apiGroups:
+    - ""
+    resources:
+    - services
+    verbs:
+    - get
+    - list
+    - watch
+    - patch
+    - update
+    - create
 
 - apiVersion: rbac.authorization.k8s.io/v1
   kind: RoleBinding
