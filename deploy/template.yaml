@@ -131,6 +131,20 @@ objects:
             requests:
               cpu: 250m
               memory: 128Mi
+          livenessProbe: 
+            httpGet:   
+              path: /_alive
+              port: 9000
+            initialDelaySeconds: 5
+            timeoutSeconds: 1
+            periodSeconds: 10
+            failureThreshold: 3
+          startupProbe: 
+            httpGet:   
+              path: /_ready
+              port: 9000
+            failureThreshold: 30
+            periodSeconds: 10
           env:
           - name: INITIALIZE_FE
             value: ${INITIALIZE_FE}

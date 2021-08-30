@@ -14,6 +14,9 @@ from crcmocks.keycloak_helper import kc_helper
 log = logging.getLogger(__name__)
 
 
+INITIALIZED = False
+
+
 def create_service(namespace, name, src_port):
     """
     Create a Service resource that points the name/src_port towards the mocks pod
@@ -35,6 +38,8 @@ def create_service(namespace, name, src_port):
 
 
 def initialize():
+    global INITIALIZED
+
     namespace = None
     if conf.INITIALIZE_FE or conf.INITIALIZE_GW:
         log.info("Initializing k8s environment...")
@@ -53,6 +58,8 @@ def initialize():
         create_service(namespace, "rbac", 8080)
     if conf.MOCK_ENTITLEMENTS:
         create_service(namespace, "entitlements-api-go", 3000)
+
+    INITIALIZED = True
 
 
 def initialize_fe(namespace):
