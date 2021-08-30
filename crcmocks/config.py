@@ -9,7 +9,7 @@ INITIALIZE_FE = env_bool("INITIALIZE_FE", False)
 INITIALIZE_GW = env_bool("INITIALIZE_GW", False)
 MOCK_ENTITLEMENTS = env_bool("MOCK_ENTITLEMENTS", True)
 MOCK_BOP = env_bool("MOCK_BOP", True)
-MOCK_BOP = env_bool("MOCK_RBAC", True)
+MOCK_RBAC = env_bool("MOCK_RBAC", True)
 
 FE_DEPLOYMENT = os.getenv("FE_DEPLOYMENT", "front-end-aggregator")
 GW_DEPLOYMENT = os.getenv("GW_DEPLOYMENT", "apicast")
