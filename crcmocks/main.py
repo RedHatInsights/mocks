@@ -14,7 +14,7 @@ from crcmocks.initializer import initialize
 from crcmocks.manager import blueprint as manager_bp
 from crcmocks.manager import setup_keycloak
 from crcmocks.rbac import blueprint as rbac_bp
-from crcmocks.initializer import INITIALIZED
+from crcmocks.initializer import initialized
 
 
 log = logging.getLogger(__name__)
@@ -79,7 +79,7 @@ def alive():
 
 @app.route("/_ready", methods=["GET"])
 def ready():
-    if INITIALIZED:
+    if initialized():
         return Response("ready", status=200)
     else:
         return Response("not ready", status=503)
