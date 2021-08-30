@@ -37,6 +37,9 @@ def start_flask():
 
 @app.after_request
 def store_request(response):
+    if request.path in ["/_alive", "/_ready"]:
+        return response
+
     ts = strftime("[%Y-%b-%d %H:%M]")
     request_info = {
         "timestamp": ts,
