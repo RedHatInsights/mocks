@@ -2,7 +2,7 @@
 import logging
 from time import strftime
 
-from flask import Flask
+from flask import Flask, Response
 from flask import request
 from flask.json import jsonify
 
@@ -14,6 +14,7 @@ from crcmocks.initializer import initialize
 from crcmocks.manager import blueprint as manager_bp
 from crcmocks.manager import setup_keycloak
 from crcmocks.rbac import blueprint as rbac_bp
+from crcmocks.initializer import initialized
 
 
 log = logging.getLogger(__name__)
@@ -36,6 +37,9 @@ def start_flask():
 
 @app.after_request
 def store_request(response):
+    if request.path in ["/_alive", "/_ready"]:
+        return response
+
     ts = strftime("[%Y-%b-%d %H:%M]")
     request_info = {
         "timestamp": ts,
@@ -69,6 +73,19 @@ def shutdown_server():
     else:
         shutdown()
         return "The server is shutting down!"
+
+
+@app.route("/_alive", methods=["GET"])
+def alive():
+    return "alive"
+
+
+@app.route("/_ready", methods=["GET"])
+def ready():
+    if initialized():
+        return Response("ready", status=200)
+    else:
+        return Response("not ready", status=503)
 
 
 def main():
