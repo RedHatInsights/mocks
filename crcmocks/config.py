@@ -40,6 +40,7 @@ DEFAULT_SERVICES = [
     "smart_management",
     "subscriptions",
     "user_preferences",
+    "notifications",
 ]
 
 DEFAULT_PERMISSIONS = [
@@ -54,6 +55,7 @@ DEFAULT_PERMISSIONS = [
     "vulnerability:*:*",
     "cost-management:*:*",
     "drift:*:*",
+    "notifications:*:*",
 ]
 
 DEFAULT_USERS = [
@@ -156,4 +158,21 @@ DEFAULT_USERS = [
         "entitlements": ",".join(DEFAULT_SERVICES),
         "permissions": ",".join(DEFAULT_PERMISSIONS),
     },
+    {
+        "username": "insights-qa",
+        "id": 123456787,
+        "account_number": "6089725",
+        "email": "insights-qa@redhat.com",
+        "first_name": "Insights",
+        "last_name": "QA",
+        "is_active": True,
+        "password": "redhat",
+        "org_id": "3340852",
+        "is_org_admin": True,
+        "is_internal": False,
+        "locale": "en_US",
+        "entitlements": ",".join(DEFAULT_SERVICES),
+        "permissions": ",".join(DEFAULT_PERMISSIONS),
+    },
+
 ]
