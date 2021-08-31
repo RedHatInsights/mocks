@@ -165,7 +165,7 @@ DEFAULT_USERS = [
         "first_name": "Insights",
         "last_name": "QA",
         "is_active": True,
-        "password": "redhat1",
+        "password": "redhat",
         "org_id": "3340852",
         "is_org_admin": True,
         "is_internal": False,
