@@ -60,6 +60,7 @@ def initialize():
         initialize_gw(namespace)
     if conf.MOCK_RBAC:
         create_service(namespace, "rbac", 8080)
+        create_service(namespace, "rbac-service", 8000)
     if conf.MOCK_ENTITLEMENTS:
         create_service(namespace, "entitlements-api-go", 3000)
 
