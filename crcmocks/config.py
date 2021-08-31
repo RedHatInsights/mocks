@@ -41,6 +41,7 @@ DEFAULT_SERVICES = [
     "subscriptions",
     "user_preferences",
     "notifications",
+    "integrations",
 ]
 
 DEFAULT_PERMISSIONS = [
@@ -56,6 +57,7 @@ DEFAULT_PERMISSIONS = [
     "cost-management:*:*",
     "drift:*:*",
     "notifications:*:*",
+    "integrations:*:*",
 ]
 
 DEFAULT_USERS = [
