@@ -42,6 +42,7 @@ DEFAULT_SERVICES = [
     "user_preferences",
     "notifications",
     "integrations",
+    "automation_analytics",
 ]
 
 DEFAULT_PERMISSIONS = [
@@ -58,6 +59,7 @@ DEFAULT_PERMISSIONS = [
     "drift:*:*",
     "notifications:*:*",
     "integrations:*:*",
+    "automation-analytics:*:*",
 ]
 
 DEFAULT_USERS = [
