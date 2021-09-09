@@ -178,6 +178,7 @@ DEFAULT_USERS = [
         "entitlements": ",".join(DEFAULT_SERVICES),
         "permissions": ",".join(DEFAULT_PERMISSIONS),
     },
+    {
         "username": "notifications_admin",
         "id": 123456788,
         "account_number": "6089725",
@@ -193,6 +194,7 @@ DEFAULT_USERS = [
         "entitlements": ",".join(DEFAULT_SERVICES),
         "permissions": ",".join(DEFAULT_PERMISSIONS),
     },
+    {
         "username": "notifications_user",
         "id": 123456789,
         "account_number": "6089725",
