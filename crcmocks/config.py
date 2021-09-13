@@ -181,7 +181,7 @@ DEFAULT_USERS = [
     {
         "username": "notifications_admin",
         "id": 123456788,
-        "account_number": "6089725",
+        "account_number": "6089726",
         "email": "notifications_admin@redhat.com",
         "first_name": "notifications",
         "last_name": "admin",
@@ -197,7 +197,7 @@ DEFAULT_USERS = [
     {
         "username": "notifications_user",
         "id": 123456789,
-        "account_number": "6089725",
+        "account_number": "6089727",
         "email": "notifications_user@redhat.com",
         "first_name": "notifications",
         "last_name": "user",
