@@ -137,6 +137,7 @@ class KeyCloakHelper:
             "enabled": True,
             "bearerOnly": False,
             "publicClient": True,
+            "directAccessGrantsEnabled": True,
             "redirectUris": [self.client_base_url],
             "webOrigins": [self.client_base_url],
             "protocolMappers": protocol_mappers,
