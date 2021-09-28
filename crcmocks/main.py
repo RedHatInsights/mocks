@@ -8,6 +8,7 @@ from flask.json import jsonify
 
 import crcmocks.config as conf
 import crcmocks.db
+from crcmocks.auth import blueprint as auth_bp
 from crcmocks.bop import blueprint as bop_bp
 from crcmocks.entitlements import blueprint as entitlements_bp
 from crcmocks.initializer import initialize
@@ -22,6 +23,7 @@ log = logging.getLogger(__name__)
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = conf.SECRET_KEY
+app.register_blueprint(auth_bp)
 app.register_blueprint(bop_bp, url_prefix="/api/bop")
 app.register_blueprint(entitlements_bp, url_prefix="/api/entitlements")
 app.register_blueprint(rbac_bp, url_prefix="/api/rbac")
