@@ -31,7 +31,6 @@ app.register_blueprint(manager_bp, url_prefix="/_manager")
 
 
 def start_flask():
-    logging.basicConfig(level=getattr(logging, conf.LOG_LEVEL))
     if conf.KEYCLOAK:
         setup_keycloak()
     app.run(host="0.0.0.0", port=conf.PORT, debug=True, use_reloader=False)
@@ -91,7 +90,11 @@ def ready():
 
 
 def main():
-    logging.basicConfig(level=logging.INFO)
+    logging.basicConfig(
+        format='%(asctime)s %(levelname)-8s %(message)s',
+        level=getattr(logging, conf.LOG_LEVEL),
+        datefmt='%Y-%m-%d %H:%M:%S'
+    )
     initialize()
     start_flask()
 
