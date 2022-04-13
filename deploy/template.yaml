@@ -194,8 +194,8 @@ objects:
   metadata:
     labels:
       app: mocks
-      name: keycloak
-    name: keycloak
+      name: mocks-keycloak
+    name: mocks-keycloak
   spec:
     minReadySeconds: 15
     progressDeadlineSeconds: 600
@@ -203,19 +203,19 @@ objects:
     revisionHistoryLimit: 9
     selector:
       matchLabels:
-        name: keycloak
+        name: mocks-keycloak
     strategy:
       type: Recreate
     template:
       metadata:
         labels:
           app: mocks
-          name: keycloak
+          name: mocks-keycloak
       spec:
         containers:
         - image: ${KEYCLOAK_IMAGE}:${KEYCLOAK_IMAGE_TAG}
           imagePullPolicy: Always
-          name: keycloak
+          name: mocks-keycloak
           env:
           - name: DB_VENDOR
             value: "h2"
@@ -272,7 +272,7 @@ objects:
 - apiVersion: v1
   kind: Service
   metadata:
-    name: keycloak
+    name: mocks-keycloak
   spec:
     ports:
     - name: 8080-tcp
@@ -281,7 +281,7 @@ objects:
       targetPort: 8080
     selector:
       app: mocks
-      name: keycloak
+      name: mocks-keycloak
     sessionAffinity: None
     type: ClusterIP
 
@@ -289,8 +289,8 @@ objects:
   kind: Route
   metadata:
     labels:
-      app: keycloak
-    name: keycloak
+      app: mocks-keycloak
+    name: mocks-keycloak
   spec:
     port:
       targetPort: 8080-tcp
@@ -299,7 +299,7 @@ objects:
       insecureEdgeTerminationPolicy: Redirect
     to:
       kind: Service
-      name: keycloak
+      name: mocks-keycloak
       weight: 100
     wildcardPolicy: None
 

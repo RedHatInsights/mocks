@@ -61,7 +61,7 @@ docker build -t mocks .
 Then start two containers:
 * Keycloak (SSO):
 ```
-docker run -td --name keycloak -p 8080:8080 -e DB_VENDOR=h2 -e PROXY_ADDRESS_FORWARDING=true -e KEYCLOAK_USER=admin -e KEYCLOAK_PASSWORD=admin quay.io/keycloak/keycloak:latest
+docker run -td --name mocks-keycloak -p 8080:8080 -e DB_VENDOR=h2 -e PROXY_ADDRESS_FORWARDING=true -e KEYCLOAK_USER=admin -e KEYCLOAK_PASSWORD=admin quay.io/keycloak/keycloak:latest
 ```
 * Mock APIs:
 ```
@@ -87,9 +87,9 @@ and re-build chrome with `npm run build`.
 
 When deploying to OpenShift, we have written automation that takes care of the following:
 1. update the 3scale configs to use the mock APIs deployed in this namespace (BOP, entitlements)
-2. deploy the `mocks` and `keycloak` containers into a single deployment named "mocks"
+2. deploy the `mocks` and `mocks-keycloak` containers into a single deployment named "mocks"
 3. set up `Service` objects for `rbac:8080` and `entitlements-api-go:3000` to route to the mock APIs
-4. set up `Route` objects for `keycloak` and the `mocks` containers
+4. set up `Route` objects for `mocks-keycloak` and the `mocks` containers
 5. update chrome in the front-end-aggregator deployment (if present) to use the mock SSO
 
 The end result is you should be able to browse to your front-end-aggregator URL and log in using mock SSO

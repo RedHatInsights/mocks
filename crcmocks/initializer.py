@@ -87,9 +87,11 @@ def initialize_fe(namespace):
 
     qa_host = "sso.qa.redhat.com"
 
-    keycloak_host = get_json("route", "keycloak", namespace=namespace).get("spec", {}).get("host")
+    keycloak_host = get_json(
+        "route", "mocks-keycloak", namespace=namespace
+    ).get("spec", {}).get("host")
     if not keycloak_host:
-        raise Exception("Unable to find route named 'keycloak'")
+        raise Exception("Unable to find route named 'mocks-keycloak'")
 
     fe_pod = fe_pods[0]["metadata"]["name"]
     cmd = (

@@ -14,7 +14,7 @@ MOCK_RBAC = env_bool("MOCK_RBAC", True)
 FE_DEPLOYMENT = os.getenv("FE_DEPLOYMENT", "front-end-aggregator")
 GW_DEPLOYMENT = os.getenv("GW_DEPLOYMENT", "apicast")
 
-KEYCLOAK_URL = os.getenv("KEYCLOAK_URL", "http://keycloak:8080")
+KEYCLOAK_URL = os.getenv("KEYCLOAK_URL", "http://mocks-keycloak:8080")
 KEYCLOAK_CLIENT_BASE_URL = os.getenv("KEYCLOAK_CLIENT_BASE_URL", f"https://{FE_DEPLOYMENT}")
 KEYCLOAK_USER = os.getenv("KEYCLOAK_USER", "admin")
 KEYCLOAK_PASSWORD = os.getenv("KEYCLOAK_PASSWORD", "admin")
