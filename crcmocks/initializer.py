@@ -98,7 +98,7 @@ def initialize_fe(namespace):
         f"cd /all/code/chrome/js && "
         "for f in `ls *.js`; "
         f"do sed -i s/{qa_host}/{keycloak_host}/g $f && "
-        "rm $f.gz && "
+        "rm -f $f.gz && "
         "gzip --keep $f; "
         "done"
     )
