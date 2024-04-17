@@ -3,6 +3,7 @@ set -ex
 IMAGE="quay.io/cloudservices/mocks"
 IMAGE_TAG=$(git rev-parse --short=7 HEAD)
 
+
 if [[ -z "$QUAY_USER" || -z "$QUAY_TOKEN" ]]; then
     echo "QUAY_USER and QUAY_TOKEN must be set"
     exit 1
