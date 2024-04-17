@@ -1,6 +1,8 @@
 export IMAGE="quay.io/cloudservices/mocks"  # the image location on quay
 export BONFIRE_REPO_ORG="mjholder"
+export CICD_REPO_ORG="mjholder"
 export BONFIRE_REPO_BRANCH="cleanup-tooling"
+export CICD_REPO_BRANCH="cleanup-tooling"
 # Install bonfire repo/initialize
 CICD_URL=https://raw.githubusercontent.com/RedHatInsights/bonfire/master/cicd
 curl -sS $CICD_URL/bootstrap.sh -o $WORKSPACE/.cicd_bootstrap.sh && source $WORKSPACE/.cicd_bootstrap.sh
