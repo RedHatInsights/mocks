@@ -1,5 +1,6 @@
-export IMAGE="quay.io/cloudservices/mocks"  # the image location on quay
+#!/bin/bash
 
+export IMAGE="quay.io/cloudservices/mocks"  # the image location on quay
 
 # Install bonfire repo/initialize
 BONFIRE_REPO_BRANCH=refactor-bootstrap
