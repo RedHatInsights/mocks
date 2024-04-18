@@ -1,3 +1,5 @@
+#!/bin/bash
+
 export IMAGE="quay.io/cloudservices/mocks"  # the image location on quay
 export BONFIRE_REPO_ORG="mjholder"
 export CICD_REPO_ORG="mjholder"
